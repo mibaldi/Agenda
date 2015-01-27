@@ -1,24 +1,26 @@
-package com.example.mikel.agenda;
+package com.mikel.agenda;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mikel.agenda.R;
 
-public class ActividadPrincipal extends ActionBarActivity {
+
+public class crear_asignatura extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_actividad_principal);
+        setContentView(R.layout.activity_crear_asignatura);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_actividad_principal, menu);
+        getMenuInflater().inflate(R.menu.menu_crear_asignatura, menu);
         return true;
     }
 

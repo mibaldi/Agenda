@@ -4,5 +4,10 @@
     <string name="app_name">Agenda</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="Asignaturas">Asignaturas</string>
+    <string name="Examenes">Examenes</string>
+    <string name="Evaluacion">Metodo de Evaluación</string>
+    <string name="title_activity_lista__asignaturas">Lista_Asignaturas</string>
+    <string name="title_activity_crear_asignatura">crear_asignatura</string>
 
 </resources>
