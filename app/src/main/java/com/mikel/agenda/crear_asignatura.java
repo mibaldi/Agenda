@@ -61,45 +61,5 @@ public class crear_asignatura extends ActionBarActivity {
         helper.insertarAsignatura(asig);
         Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_LONG).show();
     }
-   /* private class ProcesoCarga extends AsyncTask<Void,Void,Void>{
 
-        ProgressDialog dialog;
-        ArrayList<EAsignatura> asignaturas= new ArrayList<EAsignatura>(Arrays.asList(
-                new EAsignatura("ABD"),
-                new EAsignatura("ABD2"),
-                new EAsignatura("ABD3"),
-                new EAsignatura("PFG")
-        ));
-
-        @Override
-        protected void onPreExecute() {
-           dialog= new ProgressDialog(crear_asignatura.this);
-            dialog.setTitle("ESTO ES EL TITULO");
-            dialog.setMessage("INSERTANDO EN BD");
-            dialog.show();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if (dialog.isShowing()){
-                dialog.dismiss();
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            BD  helper = new BD(crear_asignatura.this);
-            for (int i = 0; i < asignaturas.size(); i++) {
-                EAsignatura asig = new EAsignatura();
-                asig = asignaturas.get(i);
-                helper.insertarAsignatura(asig);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-    }*/
 }

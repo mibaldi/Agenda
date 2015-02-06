@@ -17,24 +17,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Lista_Asignaturas"
-            android:label="@string/title_activity_lista__asignaturas"
+            android:name=".crear_asignatura"
+            android:label="@string/title_activity_crear_asignatura"
             android:parentActivityName=".ActividadPrincipal" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.ActividadPrincipal" />
         </activity>
         <activity
-            android:name=".crear_asignatura"
-            android:label="@string/title_activity_crear_asignatura"
-            android:parentActivityName=".Lista_Asignaturas" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mikel.agenda.Lista_Asignaturas" />
-        </activity>
-        <activity
             android:name=".lista"
             android:label="@string/title_activity_lista"
+            android:parentActivityName=".ActividadPrincipal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.ActividadPrincipal" />
+        </activity>
+        <activity
+            android:name=".Examenes"
+            android:label="@string/title_activity_examenes"
             android:parentActivityName=".ActividadPrincipal" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

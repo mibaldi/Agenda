@@ -12,5 +12,6 @@
     <string name="Nombre_Asignatura">Nombre:</string>
     <string name="Guardar">Guardar</string>
     <string name="title_activity_lista">lista</string>
+    <string name="title_activity_examenes">Examenes</string>
 
 </resources>

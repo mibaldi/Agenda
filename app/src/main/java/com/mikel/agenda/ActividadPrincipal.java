@@ -75,6 +75,8 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 startActivity(intent1);
                 break;
             case R.id.button2:
+                intent1 = new Intent(ActividadPrincipal.this, Examenes.class);
+                startActivity(intent1);
                 break;
             case R.id.button3:
                 break;
