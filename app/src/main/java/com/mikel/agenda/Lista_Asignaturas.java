@@ -1,5 +1,6 @@
 package com.mikel.agenda;
 import android.app.ListActivity;
+import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -12,14 +13,17 @@ import android.widget.Toast;
 
 import com.mikel.agenda.R;
 
+import BD.BD;
+
 public class Lista_Asignaturas extends ListActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        BD objAsignaturas = new BD(this);
+        Cursor cursor=objAsignaturas.getAsignaturasCursor();
         //Simulamos que extraemos los datos de la base de datos a un cursor
-        String[] columnasBD = new String[] {"_id", "imagen", "textoSuperior"};
+        /*String[] columnasBD = new String[] {"_id", "imagen", "textoSuperior"};
         MatrixCursor cursor = new MatrixCursor(columnasBD);
         cursor.addRow(new Object[] {"0", R.drawable.ic_launcher, "ABD"});
         cursor.addRow(new Object[] {"1", R.drawable.ic_launcher, "PFG"});
@@ -44,7 +48,7 @@ public class Lista_Asignaturas extends ListActivity{
         cursor.addRow(new Object[] {"20", R.drawable.ic_launcher, "ABD"});
         cursor.addRow(new Object[] {"21", R.drawable.ic_launcher, "PFG"});
         cursor.addRow(new Object[] {"22", R.drawable.ic_launcher, "ABD"});
-        cursor.addRow(new Object[] {"23", R.drawable.ic_launcher, "PFG"});
+        cursor.addRow(new Object[] {"23", R.drawable.ic_launcher, "PFG"});*/
         //Añadimos los datos al Adapter y le indicamos donde dibujar cada dato en la fila del Layout
         String[] desdeEstasColumnas = {"imagen", "textoSuperior"};
         int[] aEstasViews = {R.id.imageView_imagen, R.id.textView_superior};

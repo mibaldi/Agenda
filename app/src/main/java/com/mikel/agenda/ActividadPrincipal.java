@@ -4,6 +4,7 @@ package com.mikel.agenda;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -11,12 +12,15 @@ import android.view.MenuItem;
 
 import com.mikel.agenda.R;
 
+import BD.BD;
+
 
 public class ActividadPrincipal extends ActionBarActivity /*implements OnClickListener*/ {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_principal);
+        BD helper= new BD(this);
     }
 
 
@@ -45,6 +49,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
 
 
     public void onClickButton(View v) {
+        Intent intent1,intent2;
         switch (v.getId()){
             case R.id.button:
                /* AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
@@ -65,14 +70,20 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();*/
-                Intent intent = new Intent(ActividadPrincipal.this, Lista_Asignaturas.class);
-                startActivity(intent);
+                Log.e("HolaMundo", "Se ha pulsado lista");
+               intent1 = new Intent(ActividadPrincipal.this, lista.class);
+                startActivity(intent1);
                 break;
             case R.id.button2:
                 break;
             case R.id.button3:
                 break;
+            case R.id.button5:
+                intent2 = new Intent(ActividadPrincipal.this, crear_asignatura.class);
+                startActivity(intent2);
+                break;
         }
     }
+
 
 }

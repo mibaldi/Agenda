@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.mikel.agenda.ActividadPrincipal"
+            android:name=".ActividadPrincipal"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,20 +17,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mikel.agenda.Lista_Asignaturas"
+            android:name=".Lista_Asignaturas"
             android:label="@string/title_activity_lista__asignaturas"
-            android:parentActivityName="com.mikel.agenda.ActividadPrincipal" >
+            android:parentActivityName=".ActividadPrincipal" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.ActividadPrincipal" />
         </activity>
         <activity
-            android:name="com.mikel.agenda.crear_asignatura"
+            android:name=".crear_asignatura"
             android:label="@string/title_activity_crear_asignatura"
-            android:parentActivityName="com.mikel.agenda.Lista_Asignaturas" >
+            android:parentActivityName=".Lista_Asignaturas" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.Lista_Asignaturas" />
+        </activity>
+        <activity
+            android:name=".lista"
+            android:label="@string/title_activity_lista"
+            android:parentActivityName=".ActividadPrincipal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.ActividadPrincipal" />
         </activity>
     </application>
 

@@ -9,5 +9,8 @@
     <string name="Evaluacion">Metodo de Evaluación</string>
     <string name="title_activity_lista__asignaturas">Lista_Asignaturas</string>
     <string name="title_activity_crear_asignatura">crear_asignatura</string>
+    <string name="Nombre_Asignatura">Nombre:</string>
+    <string name="Guardar">Guardar</string>
+    <string name="title_activity_lista">lista</string>
 
 </resources>
