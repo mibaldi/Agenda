@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mikel.agenda" >
 
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -55,6 +58,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.lista" />
+        </activity>
+        <activity
+            android:name=".calendario"
+            android:label="@string/title_activity_calendario"
+            android:parentActivityName=".ActividadPrincipal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.ActividadPrincipal" />
         </activity>
     </application>
 

@@ -21,6 +21,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_principal);
         BD helper= new BD(this);
+
     }
 
 
@@ -81,6 +82,8 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 startActivity(intent1);
                 break;
             case R.id.button3:
+                intent2 = new Intent(ActividadPrincipal.this, calendario.class);
+                startActivity(intent2);
                 break;
             case R.id.button5:
                 intent2 = new Intent(ActividadPrincipal.this, crear_asignatura.class);
