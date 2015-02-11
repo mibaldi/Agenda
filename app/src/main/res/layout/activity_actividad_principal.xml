@@ -50,5 +50,15 @@
         android:layout_alignStart="@+id/button"
         android:onClick="onClickButton" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear Examen"
+        android:id="@+id/CrearExamen"
+        android:layout_alignTop="@+id/button5"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:onClick="onClickButton" />
+
 
 </RelativeLayout>

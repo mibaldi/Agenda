@@ -40,6 +40,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.ActividadPrincipal" />
         </activity>
+        <activity
+            android:name=".crear_examen"
+            android:label="@string/title_activity_crear_examen"
+            android:parentActivityName=".ActividadPrincipal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.ActividadPrincipal" />
+        </activity>
+        <activity
+            android:name=".Asignatura"
+            android:label="@string/title_activity_asignatura"
+            android:parentActivityName=".lista" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.lista" />
+        </activity>
     </application>
 
 </manifest>

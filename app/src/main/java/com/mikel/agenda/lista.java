@@ -1,14 +1,17 @@
 package com.mikel.agenda;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -38,6 +41,23 @@ public class lista extends ActionBarActivity implements View.OnClickListener {
         list=(ListView)findViewById(R.id.lista_listView);
         adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);
         list.setAdapter(adapter);
+        // registra una accion para el evento click
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                /// Obtiene el valor de la casilla elegida
+                String rowName = cursor.getString(cursor.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
+                int rowId = cursor.getInt(cursor.getColumnIndexOrThrow(EAsignatura.FIELD_ID));
+                Intent intent = new Intent(lista.this, Asignatura.class);
+                intent.putExtra("ID",String.valueOf(rowId));
+
+                startActivity(intent);
+                // muestra un mensaje
+               // Toast.makeText(getApplicationContext(), "Haz hecho click en " + rowId, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 

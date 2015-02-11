@@ -27,7 +27,9 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_actividad_principal, menu);
+
         return true;
     }
 
@@ -84,8 +86,13 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 intent2 = new Intent(ActividadPrincipal.this, crear_asignatura.class);
                 startActivity(intent2);
                 break;
+            case R.id.CrearExamen:
+                intent2 = new Intent(ActividadPrincipal.this, crear_examen.class);
+                startActivity(intent2);
+                break;
         }
     }
+
 
 
 }

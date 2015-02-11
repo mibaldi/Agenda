@@ -59,7 +59,7 @@ public class crear_asignatura extends ActionBarActivity {
         EAsignatura asig = new EAsignatura();
         asig.setNombre(texto.getText().toString());
         helper.insertarAsignatura(asig);
-        Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "AsignaturaObj guardada", Toast.LENGTH_LONG).show();
     }
 
 }

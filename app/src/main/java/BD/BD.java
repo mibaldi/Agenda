@@ -10,6 +10,8 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import objetos.AsignaturaObj;
+
 /**
  * Created by Mikel on 03/02/2015.
  */
@@ -54,6 +56,21 @@ public class BD  extends SQLiteOpenHelper{
         String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
         return c;
+    }
+    public AsignaturaObj getAsignaturaObj(String ID){
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
+
+        Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_ID+"=?",new String[]{ID},null,null,null);
+        if (c.getCount()>0){
+            c.moveToFirst();
+            Log.e("numero", String.valueOf(c.getCount()));
+        String rowName = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
+        AsignaturaObj asig= new AsignaturaObj(rowName);
+        return asig;
+        }else
+            return null;
+
+
     }
 
     @Override
