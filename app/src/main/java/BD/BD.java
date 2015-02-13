@@ -27,6 +27,7 @@ public class BD  extends SQLiteOpenHelper{
     private ContentValues generarValores(EAsignatura asignatura){
         ContentValues valores= new ContentValues();
         valores.put(EAsignatura.FIELD_NOMBRE,asignatura.getNombre());
+        valores.put(EAsignatura.FIELD_ENLACES,asignatura.getEnlaces());
         return valores;
     }
     public void insertarAsignatura(EAsignatura asignatura){
@@ -34,7 +35,7 @@ public class BD  extends SQLiteOpenHelper{
     }
     public ArrayList<EAsignatura> getAsignaturas(){
         ArrayList<EAsignatura> ArrayAsignaturas =new ArrayList<>();
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
        Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,null);
         if (c.moveToFirst()){
             do {
@@ -47,25 +48,27 @@ public class BD  extends SQLiteOpenHelper{
         return ArrayAsignaturas;
     }
     public Cursor getAsignaturasCursor(){
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,null);
         return c;
     }
     public Cursor buscarAsignatura(String nombre){
 
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
         return c;
     }
-    public AsignaturaObj getAsignaturaObj(String ID){
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
+    public EAsignatura getAsignaturaObj(String ID){
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
 
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_ID+"=?",new String[]{ID},null,null,null);
         if (c.getCount()>0){
             c.moveToFirst();
             Log.e("numero", String.valueOf(c.getCount()));
         String rowName = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
-        AsignaturaObj asig= new AsignaturaObj(rowName);
+        String rowEnlaces= c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_ENLACES));
+        EAsignatura asig= new EAsignatura(rowName);
+        asig.setEnlaces(rowEnlaces);
         return asig;
         }else
             return null;

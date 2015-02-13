@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.mikel.agenda.R;
 
 import BD.BD;
 
@@ -92,6 +91,9 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
             case R.id.CrearExamen:
                 intent2 = new Intent(ActividadPrincipal.this, crear_examen.class);
                 startActivity(intent2);
+                break;
+            case R.id.btnLogin:
+
                 break;
         }
     }

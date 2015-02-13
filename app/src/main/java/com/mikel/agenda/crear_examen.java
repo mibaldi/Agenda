@@ -23,8 +23,9 @@ import BD.*;
 
 
 public class crear_examen extends ActionBarActivity{
-    /*DateFormat formate =DateFormat.getDateInstance();
-    Calendar calendar= Calendar.getInstance();*/
+
+    Calendar calendar= Calendar.getInstance();
+    int a,m,d;
     Button btn;
     TextView fecha;
     private BD objAsignaturas;
@@ -44,37 +45,33 @@ public class crear_examen extends ActionBarActivity{
         spnClients.setAdapter(adapter);
         fecha=(TextView)findViewById(R.id.textView7);
         btn=(Button)findViewById(R.id.btnFecha);
-       // btn.setOnClickListener(this);
-        //updateDate();
+        a=calendar.get(Calendar.YEAR);
+        m=calendar.get(Calendar.MONTH);
+        d=calendar.get(Calendar.DAY_OF_MONTH);
+
     }
-   /* public void updateDate(){
-        fecha.setText(formate.format(calendar.getTime()));
-    }
-    public void setDate(){
-        new DatePickerDialog(crear_examen.this,d,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-    }*/
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_crear_examen, menu);
         return true;
     }
-    /*DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener(){
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            calendar.set(Calendar.YEAR,year);
-            calendar.set(Calendar.MONTH,monthOfYear);
-            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-            updateDate();
-        }
-    };
 
-    @Override
-    public void onClick(View v) {
-        setDate();
-    }*/
+    public void EscogerFecha(View view){
+        DatePickerDialog.OnDateSetListener mdpd=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                int uno=1;
+                a=year;
+                m=monthOfYear+uno;
+                d=dayOfMonth;
 
-
-
+                fecha.setText(d+"/"+m+"/"+a);
+            }
+        };
+       DatePickerDialog dpd = new DatePickerDialog(this,mdpd,a,m,d);
+        dpd.show();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

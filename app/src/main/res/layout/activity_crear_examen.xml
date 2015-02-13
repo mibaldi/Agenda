@@ -54,7 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seleccionar Fecha"
-        android:id="@+id/btnFecha" />
+        android:id="@+id/btnFecha"
+        android:onClick="EscogerFecha" />
 
     <TimePicker
         android:layout_width="wrap_content"

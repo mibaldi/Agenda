@@ -16,5 +16,8 @@
     <string name="title_activity_crear_examen">crear_examen</string>
     <string name="title_activity_asignatura">Asignatura</string>
     <string name="title_activity_calendario">calendario</string>
+    <string name="title_activity_logeo">logeo</string>
+    <string name="title_activity_base">Base</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>
