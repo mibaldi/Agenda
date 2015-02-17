@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import objetos.AsignaturaObj;
 
 /**
  * Created by Mikel on 03/02/2015.
@@ -29,9 +27,17 @@ public class BD  extends SQLiteOpenHelper{
         valores.put(EAsignatura.FIELD_NOMBRE,asignatura.getNombre());
         valores.put(EAsignatura.FIELD_ENLACES,asignatura.getEnlaces());
         return valores;
+    }private ContentValues generarValores2(EExamen examen){
+        ContentValues valores= new ContentValues();
+        valores.put(EExamen.FIELD_NOMBRE,examen.getNombre());
+        valores.put(EExamen.FIELD_ASIGNATURA,examen.getAsignatura());
+        return valores;
     }
     public void insertarAsignatura(EAsignatura asignatura){
         db.insert(EAsignatura.TABLE_NAME,null,generarValores(asignatura));
+    }
+    public void insertarExamen(EExamen examen){
+        db.insert(EExamen.TABLE_NAME,null,generarValores2(examen));
     }
     public ArrayList<EAsignatura> getAsignaturas(){
         ArrayList<EAsignatura> ArrayAsignaturas =new ArrayList<>();
@@ -79,6 +85,8 @@ public class BD  extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(EAsignatura.CREATE_DB_TABLE);
+        db.execSQL(EExamen.CREATE_DB_TABLE);
+        db.execSQL("PRAGMA foreign_keys = ON;");
 
     }
 

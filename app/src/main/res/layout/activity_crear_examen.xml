@@ -63,5 +63,12 @@
         android:id="@+id/timePicker"
         android:timePickerMode="spinner"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        android:id="@+id/GuardarExamen"
+        android:onClick="Guardar" />
+
 </LinearLayout>
 </ScrollView>

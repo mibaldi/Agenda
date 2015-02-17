@@ -10,9 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -26,8 +28,10 @@ public class crear_examen extends ActionBarActivity{
 
     Calendar calendar= Calendar.getInstance();
     int a,m,d;
-    Button btn;
+    Button btn,guardar;
     TextView fecha;
+    Spinner spnClients;
+    EditText etNombre;
     private BD objAsignaturas;
     private Cursor cursor;
     private ListView list;
@@ -41,13 +45,19 @@ public class crear_examen extends ActionBarActivity{
         String[]from={EAsignatura.FIELD_ID, EAsignatura.FIELD_NOMBRE};
         int[]to=new int[]{android.R.id.text1,android.R.id.text2};
         adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);
-        Spinner spnClients = (Spinner) findViewById(R.id.spinner_id);
+        spnClients = (Spinner) findViewById(R.id.spinner_id);
         spnClients.setAdapter(adapter);
         fecha=(TextView)findViewById(R.id.textView7);
         btn=(Button)findViewById(R.id.btnFecha);
         a=calendar.get(Calendar.YEAR);
         m=calendar.get(Calendar.MONTH);
         d=calendar.get(Calendar.DAY_OF_MONTH);
+        guardar=(Button)findViewById(R.id.GuardarExamen);
+        etNombre= (EditText) findViewById(R.id.editText2);
+
+
+
+
 
     }
 
@@ -71,6 +81,17 @@ public class crear_examen extends ActionBarActivity{
         };
        DatePickerDialog dpd = new DatePickerDialog(this,mdpd,a,m,d);
         dpd.show();
+    }
+    public void Guardar(View view){
+        BD  helper = new BD(crear_examen.this);
+        EExamen examen = new EExamen();
+        Cursor c= (Cursor)spnClients.getSelectedItem();
+        String text = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
+        String nombre= etNombre.getText().toString();
+        examen.setNombre(nombre);
+        examen.setAsignatura(text);
+        helper.insertarExamen(examen);
+        Toast.makeText(getApplicationContext(), "Examen guardado", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -10,9 +10,15 @@ public class EAsignatura {
     public static final String FIELD_ENLACES = "enlaces";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + "( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
-                                                  FIELD_NOMBRE + " text,"+
+                                                  FIELD_NOMBRE + " text unique,"+
                                                   FIELD_ENLACES + " text"
                                                   + " );";
+    /*public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + "( " +
+                                                  FIELD_ID  + " integer,"+
+                                                  FIELD_NOMBRE + " text,"+
+                                                  FIELD_ENLACES + " text,"+
+                                                  "PRIMARY KEY ("+FIELD_ID+","+FIELD_NOMBRE +")"
+                                                  + " );";*/
     private int id;
     private String nombre;
     private String enlaces;
