@@ -8,20 +8,17 @@ public class EAsignatura {
     public static final String FIELD_ID = "_id";
     public static final String FIELD_NOMBRE = "nombre";
     public static final String FIELD_ENLACES = "enlaces";
+    public static final String FIELD_EVALUACION = "evaluacion";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + "( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
                                                   FIELD_NOMBRE + " text unique,"+
-                                                  FIELD_ENLACES + " text"
-                                                  + " );";
-    /*public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + "( " +
-                                                  FIELD_ID  + " integer,"+
-                                                  FIELD_NOMBRE + " text,"+
                                                   FIELD_ENLACES + " text,"+
-                                                  "PRIMARY KEY ("+FIELD_ID+","+FIELD_NOMBRE +")"
-                                                  + " );";*/
+                                                  FIELD_EVALUACION + " text"
+                                                  + " );";
     private int id;
     private String nombre;
     private String enlaces;
+    private String evaluacion;
 
     public EAsignatura(String nombre) {
         this.nombre = nombre;
@@ -52,5 +49,13 @@ public class EAsignatura {
 
     public void setEnlaces(String enlaces) {
         this.enlaces = enlaces;
+    }
+
+    public String getEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(String evaluacion) {
+        this.evaluacion = evaluacion;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
@@ -36,6 +37,7 @@ public class crear_examen extends ActionBarActivity{
     private Cursor cursor;
     private ListView list;
     private SimpleCursorAdapter adapter;
+    TimePicker hora;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +52,12 @@ public class crear_examen extends ActionBarActivity{
         fecha=(TextView)findViewById(R.id.textView7);
         btn=(Button)findViewById(R.id.btnFecha);
         a=calendar.get(Calendar.YEAR);
-        m=calendar.get(Calendar.MONTH);
+        m=calendar.get(Calendar.MONTH)+1;
         d=calendar.get(Calendar.DAY_OF_MONTH);
         guardar=(Button)findViewById(R.id.GuardarExamen);
         etNombre= (EditText) findViewById(R.id.editText2);
+        hora=(TimePicker)findViewById(R.id.timePicker);
+
 
 
 
@@ -90,6 +94,9 @@ public class crear_examen extends ActionBarActivity{
         String nombre= etNombre.getText().toString();
         examen.setNombre(nombre);
         examen.setAsignatura(text);
+        examen.setFecha(d + "/" + m + "/" + a);
+        String horaString = hora.getCurrentHour()+":"+hora.getCurrentMinute();
+        examen.setHora(horaString);
         helper.insertarExamen(examen);
         Toast.makeText(getApplicationContext(), "Examen guardado", Toast.LENGTH_SHORT).show();
     }

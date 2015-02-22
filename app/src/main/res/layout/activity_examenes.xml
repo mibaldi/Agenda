@@ -8,16 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <TextView
-            android:layout_width="218dp"
+        <ListView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lista"
-            android:id="@+id/textView2" />
-
+            android:id="@+id/Lista2"
+            android:choiceMode="singleChoice" />
     </FrameLayout>
     <ListView
         android:id="@+id/left_drawer"
-        android:layout_width="240dp"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"

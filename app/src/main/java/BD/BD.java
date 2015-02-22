@@ -26,11 +26,14 @@ public class BD  extends SQLiteOpenHelper{
         ContentValues valores= new ContentValues();
         valores.put(EAsignatura.FIELD_NOMBRE,asignatura.getNombre());
         valores.put(EAsignatura.FIELD_ENLACES,asignatura.getEnlaces());
+        valores.put(EAsignatura.FIELD_EVALUACION,asignatura.getEvaluacion());
         return valores;
     }private ContentValues generarValores2(EExamen examen){
         ContentValues valores= new ContentValues();
         valores.put(EExamen.FIELD_NOMBRE,examen.getNombre());
         valores.put(EExamen.FIELD_ASIGNATURA,examen.getAsignatura());
+        valores.put(EExamen.FIELD_FECHA,examen.getFecha());
+        valores.put(EExamen.FIELD_HORA,examen.getHora());
         return valores;
     }
     public void insertarAsignatura(EAsignatura asignatura){
@@ -41,31 +44,38 @@ public class BD  extends SQLiteOpenHelper{
     }
     public ArrayList<EAsignatura> getAsignaturas(){
         ArrayList<EAsignatura> ArrayAsignaturas =new ArrayList<>();
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES,EAsignatura.FIELD_EVALUACION};
        Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,null);
         if (c.moveToFirst()){
             do {
                 EAsignatura a=new EAsignatura();
                 a.setId(c.getInt(0));
                 a.setNombre(c.getString(1));
+                a.setEnlaces(c.getString(2));
+                a.setEvaluacion(c.getString(3));
                 ArrayAsignaturas.add(a);
             }while (c.moveToNext());
         }
         return ArrayAsignaturas;
     }
     public Cursor getAsignaturasCursor(){
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES,EAsignatura.FIELD_EVALUACION};
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,null);
+        return c;
+    }
+    public Cursor getExamenesCursor(){
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA};
+        Cursor c= db.query(EExamen.TABLE_NAME,columnas,null,null,null,null,null);
         return c;
     }
     public Cursor buscarAsignatura(String nombre){
 
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES,EAsignatura.FIELD_EVALUACION};
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
         return c;
     }
     public EAsignatura getAsignaturaObj(String ID){
-        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES};
+        String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES,EAsignatura.FIELD_EVALUACION};
 
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_ID+"=?",new String[]{ID},null,null,null);
         if (c.getCount()>0){
@@ -73,8 +83,10 @@ public class BD  extends SQLiteOpenHelper{
             Log.e("numero", String.valueOf(c.getCount()));
         String rowName = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
         String rowEnlaces= c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_ENLACES));
+        String rowEvaluacion= c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_EVALUACION));
         EAsignatura asig= new EAsignatura(rowName);
         asig.setEnlaces(rowEnlaces);
+        asig.setEvaluacion(rowEvaluacion);
         return asig;
         }else
             return null;

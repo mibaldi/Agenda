@@ -33,16 +33,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Evaluacion"
-        android:id="@+id/button3"
-        android:layout_marginTop="93dp"
-        android:layout_below="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:onClick="onClickButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="CrearAsignatura"
         android:id="@+id/button5"
         android:layout_below="@+id/button"
@@ -58,15 +48,6 @@
         android:layout_alignTop="@+id/button5"
         android:layout_alignLeft="@+id/button2"
         android:layout_alignStart="@+id/button2"
-        android:onClick="onClickButton" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/btnLogin"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:onClick="onClickButton" />
 
 

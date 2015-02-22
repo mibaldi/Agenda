@@ -2,9 +2,9 @@
 <resources>
     <string-array name="cajon">
     <item>Principal</item>
-    <item>Cortar</item>
-    <item>Copiar</item>
-    <item>Eliminar</item>
+    <item>Crear Asignatura</item>
+    <item>Crear Examen</item>
+    <item>Lista Asignaturas</item>
     <item>Compartir</item>
 </string-array>
     <string name="drawer_open">Cajon abierto</string>

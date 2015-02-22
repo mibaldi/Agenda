@@ -19,5 +19,7 @@
     <string name="title_activity_logeo">logeo</string>
     <string name="title_activity_base">Base</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="radio_continua">Continua</string>
+    <string name="radio_conjunta">Conjunta</string>
 
 </resources>

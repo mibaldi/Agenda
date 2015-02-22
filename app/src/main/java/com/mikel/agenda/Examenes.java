@@ -2,11 +2,13 @@ package com.mikel.agenda;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -16,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import BD.*;
+
 
 public class Examenes extends ActionBarActivity implements ListView.OnItemClickListener, DrawerListener {
 
@@ -23,6 +27,8 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
     private DrawerLayout cajon;
     private ListView opciones;
     private ActionBarDrawerToggle toggle;
+    Cursor cursor;
+    private SimpleCursorAdapter adapter;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,18 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
 
         cajon.setDrawerListener(this);
+
+
+        ListView lista2= (ListView) findViewById(R.id.Lista2);
+        BD helper= new BD(this);
+        cursor=helper.getExamenesCursor();
+        String[]from={EExamen.FIELD_ID, EExamen.FIELD_NOMBRE};
+        int[]to=new int[]{android.R.id.text1,android.R.id.text2};
+        //lista2=(ListView)findViewById(R.id.lista_listView);
+        adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);
+        lista2.setAdapter(adapter);
+
+
     }
 
 
@@ -59,18 +77,24 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
        Intent intent1;
         switch (arg2) {
             case 0:
-                intent1 = new Intent(Examenes.this, lista.class);
+                intent1 = new Intent(Examenes.this, ActividadPrincipal.class);
                 startActivity(intent1);
-                Toast.makeText(getApplicationContext(), "BUSCAR", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Prncipal", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
-                Toast.makeText(getApplicationContext(), "CORTAR", Toast.LENGTH_SHORT).show();
+                intent1 = new Intent(Examenes.this, crear_asignatura.class);
+                startActivity(intent1);
+                Toast.makeText(getApplicationContext(), "Crear Asignatura", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(getApplicationContext(), "COPIAR", Toast.LENGTH_SHORT).show();
+                intent1 = new Intent(Examenes.this, crear_examen.class);
+                startActivity(intent1);
+                Toast.makeText(getApplicationContext(), "Crear Examen", Toast.LENGTH_SHORT).show();
                 break;
             case 3:
-                Toast.makeText(getApplicationContext(), "ELIMINAR", Toast.LENGTH_SHORT).show();
+                intent1 = new Intent(Examenes.this, lista.class);
+                startActivity(intent1);
+                Toast.makeText(getApplicationContext(), "Lista Asignaturas", Toast.LENGTH_SHORT).show();
                 break;
             case 4:
                 Toast.makeText(getApplicationContext(), "COMPARTIR", Toast.LENGTH_SHORT).show();

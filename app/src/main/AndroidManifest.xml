@@ -30,7 +30,8 @@
         <activity
             android:name=".crear_asignatura"
             android:label="@string/title_activity_crear_asignatura"
-            android:parentActivityName=".ActividadPrincipal" >
+            android:parentActivityName=".ActividadPrincipal"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.ActividadPrincipal" />
@@ -38,7 +39,8 @@
         <activity
             android:name=".lista"
             android:label="@string/title_activity_lista"
-            android:parentActivityName=".ActividadPrincipal" >
+            android:parentActivityName=".ActividadPrincipal"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.ActividadPrincipal" />
@@ -54,7 +56,8 @@
         <activity
             android:name=".crear_examen"
             android:label="@string/title_activity_crear_examen"
-            android:parentActivityName=".ActividadPrincipal" >
+            android:parentActivityName=".ActividadPrincipal"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.ActividadPrincipal" />
@@ -66,14 +69,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.lista" />
-        </activity>
-        <activity
-            android:name=".calendario"
-            android:label="@string/title_activity_calendario"
-            android:parentActivityName=".ActividadPrincipal" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mikel.agenda.ActividadPrincipal" />
         </activity>
 
     </application>
