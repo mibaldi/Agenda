@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 
 import BD.BD;
+import login.MainActivity;
 
 
 public class ActividadPrincipal extends ActionBarActivity /*implements OnClickListener*/ {
@@ -80,15 +81,16 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 intent1 = new Intent(ActividadPrincipal.this, Examenes.class);
                 startActivity(intent1);
                 break;
-            case R.id.button3:
-
-                break;
             case R.id.button5:
                 intent2 = new Intent(ActividadPrincipal.this, crear_asignatura.class);
                 startActivity(intent2);
                 break;
             case R.id.CrearExamen:
                 intent2 = new Intent(ActividadPrincipal.this, crear_examen.class);
+                startActivity(intent2);
+                break;
+            case R.id.bt_login:
+                intent2 = new Intent(ActividadPrincipal.this, MainActivity.class);
                 startActivity(intent2);
                 break;
         }

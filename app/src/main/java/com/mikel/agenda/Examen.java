@@ -11,41 +11,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import BD.*;
-import objetos.AsignaturaObj;
 
 
-public class Asignatura extends ActionBarActivity {
-    private BD objAsignaturas;
-    private TextView nombreAsig,eval;
+public class Examen extends ActionBarActivity {
+    private BD helper;
+    private TextView nombre,nombreAsig,fecha,hora;
     private String ID;
-    private EAsignatura asigEscogida;
+    private EExamen ExamenEscogido;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_asignatura);
+        setContentView(R.layout.activity_examen);
         Intent intent =getIntent();
         ID=intent.getStringExtra("ID");
-        LinearLayout ll= (LinearLayout)findViewById(R.id.LlAsignatura);
         Log.e("ID", ID);
-        objAsignaturas = new BD(this);
-        asigEscogida=objAsignaturas.getAsignaturaObj(ID);
-        nombreAsig= (TextView)findViewById(R.id.NombreAsig);
-        eval= (TextView)findViewById(R.id.eval);
-        if (asigEscogida!=null){
-            nombreAsig.setText(asigEscogida.getNombre());
-            eval.setText(asigEscogida.getEvaluacion());
-            String enlaces= asigEscogida.getEnlaces();
-            String enlacesSueltos[]=enlaces.split("[;]");
-            for (int i =0; i< enlacesSueltos.length;i++){
-                TextView texto=new TextView(this);
-                texto.setText(enlacesSueltos[i]);
-                texto.setAutoLinkMask(1);
-                texto.setTextSize(25);
-                texto.setSingleLine();
-                texto.setMovementMethod(LinkMovementMethod.getInstance());
-                ll.addView(texto);
-            }
+        helper = new BD(this);
+        ExamenEscogido=helper.getEExamen(ID);
+        nombre= (TextView)findViewById(R.id.nombreExamen);
+        nombreAsig= (TextView)findViewById(R.id.nombreAsig);
+        fecha= (TextView)findViewById(R.id.fecha);
+        hora= (TextView)findViewById(R.id.hora);
+        if (ExamenEscogido!=null){
+            nombre.setText(ExamenEscogido.getNombre());
+            nombreAsig.setText(ExamenEscogido.getAsignatura());
+            fecha.setText(ExamenEscogido.getFecha());
+            hora.setText(ExamenEscogido.getHora());
+
 
         }else{
             nombreAsig.setText("sin Asignatura");
@@ -57,7 +48,7 @@ public class Asignatura extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_asignatura, menu);
+        getMenuInflater().inflate(R.menu.menu_examen, menu);
         return true;
     }
 

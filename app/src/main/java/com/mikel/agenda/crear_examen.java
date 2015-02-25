@@ -44,9 +44,11 @@ public class crear_examen extends ActionBarActivity{
         setContentView(R.layout.activity_crear_examen);
         objAsignaturas = new BD(this);
         cursor=objAsignaturas.getAsignaturasCursor();
-        String[]from={EAsignatura.FIELD_ID, EAsignatura.FIELD_NOMBRE};
-        int[]to=new int[]{android.R.id.text1,android.R.id.text2};
-        adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);
+        //String[]from={EAsignatura.FIELD_ID, };
+        //int[]to=new int[]{android.R.id.text1,android.R.id.text2};
+        String[] from = {EAsignatura.FIELD_NOMBRE};
+        int[] to = new int[]{android.R.id.text1};
+        adapter= new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item,cursor,from,to);
         spnClients = (Spinner) findViewById(R.id.spinner_id);
         spnClients.setAdapter(adapter);
         fecha=(TextView)findViewById(R.id.textView7);
@@ -75,15 +77,15 @@ public class crear_examen extends ActionBarActivity{
         DatePickerDialog.OnDateSetListener mdpd=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                int uno=1;
+
                 a=year;
-                m=monthOfYear+uno;
+                m=monthOfYear+1;
                 d=dayOfMonth;
 
                 fecha.setText(d+"/"+m+"/"+a);
             }
         };
-       DatePickerDialog dpd = new DatePickerDialog(this,mdpd,a,m,d);
+       DatePickerDialog dpd = new DatePickerDialog(this,mdpd,a,m-1,d);
         dpd.show();
     }
     public void Guardar(View view){
@@ -92,13 +94,18 @@ public class crear_examen extends ActionBarActivity{
         Cursor c= (Cursor)spnClients.getSelectedItem();
         String text = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
         String nombre= etNombre.getText().toString();
-        examen.setNombre(nombre);
-        examen.setAsignatura(text);
-        examen.setFecha(d + "/" + m + "/" + a);
-        String horaString = hora.getCurrentHour()+":"+hora.getCurrentMinute();
-        examen.setHora(horaString);
-        helper.insertarExamen(examen);
-        Toast.makeText(getApplicationContext(), "Examen guardado", Toast.LENGTH_SHORT).show();
+        if (nombre.matches("")){
+            Toast.makeText(getApplicationContext(), "Campo de nombre obligatorio ", Toast.LENGTH_SHORT).show();
+        }else{
+            examen.setNombre(nombre);
+            examen.setAsignatura(text);
+            examen.setFecha(d + "/" + m + "/" + a);
+            String horaString = hora.getCurrentHour()+":"+hora.getCurrentMinute();
+            examen.setHora(horaString);
+            helper.insertarExamen(examen);
+            Toast.makeText(getApplicationContext(), "Examen guardado", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

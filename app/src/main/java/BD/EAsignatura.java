@@ -11,7 +11,7 @@ public class EAsignatura {
     public static final String FIELD_EVALUACION = "evaluacion";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + "( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
-                                                  FIELD_NOMBRE + " text unique,"+
+                                                  FIELD_NOMBRE + " text unique not null,"+
                                                   FIELD_ENLACES + " text,"+
                                                   FIELD_EVALUACION + " text"
                                                   + " );";

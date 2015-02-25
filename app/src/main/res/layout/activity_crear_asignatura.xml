@@ -24,7 +24,7 @@
             android:id="@+id/tvNombre" />
 
         <EditText
-            android:layout_width="136dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/texto" />
 
@@ -36,8 +36,8 @@
             android:id="@+id/tvEnlace" />
 
         <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/sv2" >
 
             <LinearLayout

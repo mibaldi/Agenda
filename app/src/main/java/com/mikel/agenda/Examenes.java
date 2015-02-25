@@ -21,6 +21,7 @@ import android.widget.Toast;
 import BD.*;
 
 
+
 public class Examenes extends ActionBarActivity implements ListView.OnItemClickListener, DrawerListener {
 
     private ActionBar actionBar;
@@ -68,6 +69,22 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
         //lista2=(ListView)findViewById(R.id.lista_listView);
         adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);
         lista2.setAdapter(adapter);
+        lista2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                /// Obtiene el valor de la casilla elegida
+                String rowName = cursor.getString(cursor.getColumnIndexOrThrow(EExamen.FIELD_NOMBRE));
+                int rowId = cursor.getInt(cursor.getColumnIndexOrThrow(EExamen.FIELD_ID));
+                Intent intent = new Intent(Examenes.this, Examen.class);
+                intent.putExtra("ID",String.valueOf(rowId));
+
+                startActivity(intent);
+                // muestra un mensaje
+                // Toast.makeText(getApplicationContext(), "Haz hecho click en " + rowId, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
 
     }
@@ -79,7 +96,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
             case 0:
                 intent1 = new Intent(Examenes.this, ActividadPrincipal.class);
                 startActivity(intent1);
-                Toast.makeText(getApplicationContext(), "Prncipal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Principal", Toast.LENGTH_SHORT).show();
                 break;
             case 1:
                 intent1 = new Intent(Examenes.this, crear_asignatura.class);

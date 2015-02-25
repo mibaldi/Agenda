@@ -36,8 +36,10 @@ public class BD  extends SQLiteOpenHelper{
         valores.put(EExamen.FIELD_HORA,examen.getHora());
         return valores;
     }
-    public void insertarAsignatura(EAsignatura asignatura){
-        db.insert(EAsignatura.TABLE_NAME,null,generarValores(asignatura));
+    public long  insertarAsignatura(EAsignatura asignatura){
+
+        long res=db.insert(EAsignatura.TABLE_NAME,null,generarValores(asignatura));
+        return res;
     }
     public void insertarExamen(EExamen examen){
         db.insert(EExamen.TABLE_NAME,null,generarValores2(examen));
@@ -88,6 +90,27 @@ public class BD  extends SQLiteOpenHelper{
         asig.setEnlaces(rowEnlaces);
         asig.setEvaluacion(rowEvaluacion);
         return asig;
+        }else
+            return null;
+
+
+    }
+    public EExamen getEExamen(String ID){
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA};
+
+        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ID+"=?",new String[]{ID},null,null,null);
+        if (c.getCount()>0){
+            c.moveToFirst();
+            Log.e("numero", String.valueOf(c.getCount()));
+            String rowName = c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_NOMBRE));
+            String rowAsig= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_ASIGNATURA));
+            String rowFecha= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_FECHA));
+            String rowHora= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_HORA));
+            EExamen exa= new EExamen(rowName);
+            exa.setAsignatura(rowAsig);
+            exa.setFecha(rowFecha);
+            exa.setHora(rowHora);
+            return exa;
         }else
             return null;
 

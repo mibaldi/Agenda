@@ -61,6 +61,7 @@ public class crear_asignatura extends ActionBarActivity {
                 allEds.add(temp);
                 int id=totalEditText+1;
                 temp.setId(id);
+                temp.setWidth(ll2.getWidth());
                 ll2.addView(temp);
 
 
@@ -72,21 +73,30 @@ public class crear_asignatura extends ActionBarActivity {
             public void onClick(View v) {
                 BD  helper = new BD(crear_asignatura.this);
                 EAsignatura asig = new EAsignatura();
-                asig.setNombre(texto.getText().toString());
-                ArrayList<String> a= new ArrayList<String>();
-
-                for (int i=0;i<allEds.size();i++){
-                    if (!TextUtils.isEmpty(allEds.get(i).getText())) a.add(allEds.get(i).getText().toString());
-
+                if (texto.getText().toString().matches("")) {
+                    Toast.makeText(getApplicationContext(), "Campo de nombre obligatorio", Toast.LENGTH_SHORT).show();
                 }
-                String enlaces=Joiner.on(';').join(a);
-                Log.d("Edit",enlaces);
-                asig.setEnlaces(enlaces);
-                int selectId=radioEvalucionGroup.getCheckedRadioButtonId();
-                radioEleccion=(RadioButton)findViewById(selectId);
-                asig.setEvaluacion(radioEleccion.getText().toString());
-                helper.insertarAsignatura(asig);
-                Toast.makeText(getApplicationContext(), "AsignaturaObj guardada como"+ radioEleccion.getText(), Toast.LENGTH_SHORT).show();
+                else{
+                    asig.setNombre(texto.getText().toString());
+                    ArrayList<String> a= new ArrayList<String>();
+
+                    for (int i=0;i<allEds.size();i++){
+                        if (!TextUtils.isEmpty(allEds.get(i).getText())) a.add(allEds.get(i).getText().toString());
+
+                    }
+                    String enlaces=Joiner.on(';').join(a);
+                    Log.d("Edit",enlaces);
+                    asig.setEnlaces(enlaces);
+                    int selectId=radioEvalucionGroup.getCheckedRadioButtonId();
+                    radioEleccion=(RadioButton)findViewById(selectId);
+                    asig.setEvaluacion(radioEleccion.getText().toString());
+                    long res=helper.insertarAsignatura(asig);
+                    if (res!=-1){
+                        Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_SHORT).show();}
+                    else Toast.makeText(getApplicationContext(), "No se ha guardado la asignatura", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
     }
