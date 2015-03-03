@@ -17,6 +17,7 @@ android {
         targetSdkVersion 21
         versionCode 3
         versionName "2.1"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
@@ -29,6 +30,8 @@ android {
         }
 
     }
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -36,4 +39,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.google.apis:google-api-services-calendar:v3-rev117-1.19.1'
+    compile ('com.google.api-client:google-api-client-android:1.17.0-rc') {
+        exclude module: 'httpclient'
+    }
+    compile ('com.google.http-client:google-http-client-gson:1.17.0-rc') {
+        exclude module: 'httpclient'
+    }
+
 }
