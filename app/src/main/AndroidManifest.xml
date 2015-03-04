@@ -35,6 +35,7 @@
             android:name=".crear_asignatura"
             android:label="@string/title_activity_crear_asignatura"
             android:parentActivityName=".ActividadPrincipal"
+            android:configChanges="orientation"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

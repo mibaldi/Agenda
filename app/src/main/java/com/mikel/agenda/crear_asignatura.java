@@ -1,37 +1,22 @@
 package com.mikel.agenda;
 
-import android.app.ActionBar;
-import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.wifi.WifiEnterpriseConfig;
-import android.os.AsyncTask;
-import android.provider.ContactsContract;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.client.util.Joiner;
-import com.mikel.agenda.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import BD.BD;
@@ -43,25 +28,41 @@ public class crear_asignatura extends ActionBarActivity {
     RadioGroup radioEvalucionGroup;
     RadioButton radioEleccion;
     LinearLayout ll2;
-    int totalEditText=0;
+    ArrayList<String> alist=new ArrayList<String>();
+    int et;
+
     List<EditText> allEds = new ArrayList<EditText>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if ( savedInstanceState !=  null )
+        {
+            alist=savedInstanceState.getStringArrayList("allEds");
+            et=savedInstanceState.getInt("et");
+
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_asignatura);
         ll2 = (LinearLayout)findViewById(R.id.ll2);
         texto=(EditText)findViewById(R.id.texto);
-        radioEvalucionGroup = (RadioGroup)findViewById(R.id.radioEvaluacionGroup);
 
+        radioEvalucionGroup = (RadioGroup)findViewById(R.id.radioEvaluacionGroup);
+        for (int i=0;i<alist.size();i++){
+            EditText temp= new EditText(crear_asignatura.this);
+            temp.setText(alist.get(i));
+            temp.setWidth(ll2.getWidth());
+            if (i==et) temp.requestFocus();
+            allEds.add(temp);
+            ll2.addView(temp);
+        }
         Button ib = (Button) findViewById(R.id.ib);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 EditText temp= new EditText(crear_asignatura.this);
-                allEds.add(temp);
-                int id=totalEditText+1;
-                temp.setId(id);
+
                 temp.setWidth(ll2.getWidth());
+                allEds.add(temp);
                 ll2.addView(temp);
 
 
@@ -84,6 +85,7 @@ public class crear_asignatura extends ActionBarActivity {
                         if (!TextUtils.isEmpty(allEds.get(i).getText())) a.add(allEds.get(i).getText().toString());
 
                     }
+
                     String enlaces=Joiner.on(';').join(a);
                     Log.d("Edit",enlaces);
                     asig.setEnlaces(enlaces);
@@ -101,6 +103,19 @@ public class crear_asignatura extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected  void onSaveInstanceState ( Bundle outState )  {
+        super.onSaveInstanceState(outState);
+        ArrayList<String> alist=new ArrayList<String>();
+        int et=0;
+        for (int i=0;i<allEds.size();i++){
+            alist.add(allEds.get(i).getText().toString());
+            if (allEds.get(i).hasFocus()) et=i;
+        }
+
+       outState.putStringArrayList("allEds",alist);
+        outState.putInt("et",et);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
