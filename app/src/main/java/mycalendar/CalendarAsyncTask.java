@@ -14,12 +14,12 @@
 
 package mycalendar;
 
+import android.os.AsyncTask;
+import android.view.View;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.mikel.agenda.R;
-
-import android.os.AsyncTask;
-import android.view.View;
 
 import java.io.IOException;
 

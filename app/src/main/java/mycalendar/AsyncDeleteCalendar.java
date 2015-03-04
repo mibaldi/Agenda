@@ -35,7 +35,6 @@ class AsyncDeleteCalendar extends CalendarAsyncTask {
   @Override
   protected void doInBackground() throws IOException {
     try {
-
       client.calendars().delete(calendarId).execute();
     } catch (GoogleJsonResponseException e) {
       // 404 Not Found would happen if user tries to delete an already deleted calendar

@@ -31,7 +31,7 @@ public class CalendarInfo implements Comparable<CalendarInfo>, Cloneable {
   String id;
   String summary;
 
-  public CalendarInfo(String id, String summary) {
+  CalendarInfo(String id, String summary) {
     this.id = id;
     this.summary = summary;
   }

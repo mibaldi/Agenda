@@ -1,18 +1,20 @@
 package com.mikel.agenda;
 
 
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import java.util.logging.Logger;
-import BD.BD;
-import login.MainActivity;
-import mycalendar.*;
-////////////////////////////
+import android.view.View;
+
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -20,82 +22,38 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Calendar;
-import com.mikel.agenda.R;
 
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import BD.BD;
+import login.MainActivity;
+////////////////////////////
+
+
 public class ActividadPrincipal extends ActionBarActivity /*implements OnClickListener*/ {
-   /* private static final Level LOGGING_LEVEL = Level.CONFIG;
-
-    private static final String PREF_ACCOUNT_NAME = "accountName";
-
-    static final String TAG = "CalendarSampleActivity";
-
-    private static final int CONTEXT_EDIT = 0;
-
-    private static final int CONTEXT_DELETE = 1;
-
-    private static final int CONTEXT_BATCH_ADD = 2;
-
+    /////////////////////////////////////
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
-
     static final int REQUEST_AUTHORIZATION = 1;
-
     static final int REQUEST_ACCOUNT_PICKER = 2;
-
     private final static int ADD_OR_EDIT_CALENDAR_REQUEST = 3;
-
+    private static final Level LOGGING_LEVEL = Level.CONFIG;
+    private static final String PREF_ACCOUNT_NAME = "accountName";
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
-    GoogleAccountCredential credential;
-
-    CalendarModel model = new CalendarModel();
-
-    ArrayAdapter<CalendarInfo> adapter;
-
-    com.google.api.services.calendar.Calendar client;
-
-    int numAsyncTasks;*/
-
-
-    ///////////////////////
+    public static GoogleAccountCredential credential;
+    public static com.google.api.services.calendar.Calendar client;
+    int numAsyncTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad_principal);
         BD helper= new BD(this);
-        /////////////////////////////////////////
         // enable logging
-        /*Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
+        Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
+        // Google Accounts
         credential =
                 GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -103,19 +61,8 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         // Calendar client
         client = new com.google.api.services.calendar.Calendar.Builder(
                 transport, jsonFactory, credential).setApplicationName("Baldugenda")
-                .build();*/
-    }
+                .build();
 
-
-    //////////////////////
-   /* void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                        connectionStatusCode, ActividadPrincipal.this, REQUEST_GOOGLE_PLAY_SERVICES);
-                dialog.show();
-            }
-        });
     }
     @Override
     protected void onResume() {
@@ -125,6 +72,23 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         }
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_refresh:
+                //AsyncLoadCalendars.run(this);
+                break;
+            case R.id.menu_accounts:
+                chooseAccount();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -138,7 +102,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == Activity.RESULT_OK) {
-                    AsyncLoadCalendars.run(this);
+                    //AsyncLoadCalendars.run(this);
                 } else {
                     chooseAccount();
                 }
@@ -152,28 +116,24 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.commit();
-                        AsyncLoadCalendars.run(this);
+                        // AsyncLoadCalendars.run(this);
                     }
                 }
                 break;
-            case ADD_OR_EDIT_CALENDAR_REQUEST:
-                if (resultCode == Activity.RESULT_OK) {
-                    Calendar calendar = new Calendar();
-                    calendar.setSummary(data.getStringExtra("summary"));
-                    String id = data.getStringExtra("id");
-                    if (id == null) {
-                        new AsyncInsertCalendar(this, calendar).execute();
-                    } else {
-                        calendar.setId(id);
-                        new AsyncUpdateCalendar(this, id, calendar).execute();
-                    }
-                }
-                break;
+
         }
     }
+    void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+                        connectionStatusCode, ActividadPrincipal.this, REQUEST_GOOGLE_PLAY_SERVICES);
+                dialog.show();
+            }
+        });}
 
     /** Check that Google Play services APK is installed and up to date. */
-   /* private boolean checkGooglePlayServicesAvailable() {
+    private boolean checkGooglePlayServicesAvailable() {
         final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
             showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
@@ -181,7 +141,6 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         }
         return true;
     }
-
     private void haveGooglePlayServices() {
         // check if there is already an account selected
         if (credential.getSelectedAccountName() == null) {
@@ -189,7 +148,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
             chooseAccount();
         } else {
             // load calendars
-            AsyncLoadCalendars.run(this);
+            //AsyncLoadCalendars.run(this);
         }
     }
 
@@ -197,22 +156,9 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
-    private void startAddOrEditCalendarActivity(CalendarInfo calendarInfo) {
-        Intent intent = new Intent(this, AddOrEditCalendarActivity.class);
-        if (calendarInfo != null) {
-            intent.putExtra("id", calendarInfo.id);
-            intent.putExtra("summary", calendarInfo.summary);
-        }
-        startActivityForResult(intent, ADD_OR_EDIT_CALENDAR_REQUEST);
-    }
-    */
 
 
-    /////////////////////////
-
-
-
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
@@ -234,7 +180,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 
 
@@ -274,6 +220,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 break;
             case R.id.CrearExamen:
                 intent2 = new Intent(ActividadPrincipal.this, crear_examen.class);
+               // intent2.putExtra("client", (android.os.Parcelable) client);
                 startActivity(intent2);
                 break;
             case R.id.bt_login:
@@ -281,14 +228,10 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 startActivity(intent2);
                 break;
             case R.id.calendario:
-                intent2 = new Intent(ActividadPrincipal.this, CalendarSampleActivity.class);
+                intent2 = new Intent(ActividadPrincipal.this, mycalendar.CalendarSampleActivity.class);
                 startActivity(intent2);
                 break;
-            /*case R.id.crear:
-                CalendarInfo calendarInfo = new CalendarInfo("hb2a3khkmlgt0gbel078t35v3g@group.calendar.google.com","prueba");
-                new events(ActividadPrincipal.this,calendarInfo);
-               // new events(CalendarSampleActivity.this,calendarInfo).execute();
-                break;*/
+
         }
     }
 

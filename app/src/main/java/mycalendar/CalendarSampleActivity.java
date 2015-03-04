@@ -14,16 +14,6 @@
 
 package mycalendar;
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.Calendar;
-import com.mikel.agenda.R;
-
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,11 +35,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.calendar.model.Calendar;
+import com.mikel.agenda.ActividadPrincipal;
+import com.mikel.agenda.R;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Sample activity for Google Calendar API v3. It demonstrates how to use authorization to list
@@ -118,20 +116,22 @@ adb shell setprop log.tag.HttpTransport DEBUG
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     // enable logging
-    Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
+   ///Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
     // view and menu
     setContentView(R.layout.calendarlist);
     listView = (ListView) findViewById(R.id.list);
     registerForContextMenu(listView);
     // Google Accounts
-    credential =
+    /*credential =
         GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
     SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
     credential.setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
     // Calendar client
     client = new com.google.api.services.calendar.Calendar.Builder(
         transport, jsonFactory, credential).setApplicationName("Baldugenda")
-        .build();
+        .build();*/
+      credential=ActividadPrincipal.credential;
+      client= ActividadPrincipal.client;
   }
 
   void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {

@@ -23,7 +23,7 @@ import java.io.IOException;
  * 
  * @author Yaniv Inbar
  */
-class AsyncLoadCalendars extends CalendarAsyncTask {
+public class AsyncLoadCalendars extends CalendarAsyncTask {
 
   AsyncLoadCalendars(CalendarSampleActivity calendarSample) {
     super(calendarSample);
