@@ -1,12 +1,15 @@
 package com.mikel.agenda;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -18,14 +21,18 @@ import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.EventReminder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -34,6 +41,9 @@ import java.util.logging.Level;
 import BD.BD;
 import BD.EAsignatura;
 import BD.EExamen;
+import mycalendar.CalendarInfo;
+import mycalendar.CalendarModel;
+import mycalendar.Utils;
 
 //import java.util.Calendar;
 
@@ -47,7 +57,7 @@ public class crear_examen extends ActionBarActivity{
     int a,m,d,mes;
     Button btn,guardar;
     TextView fecha;
-    Spinner spnClients;
+    Spinner spnClients,spnCal;
     EditText etNombre;
     private BD objAsignaturas;
     private Cursor cursor;
@@ -55,6 +65,7 @@ public class crear_examen extends ActionBarActivity{
     private SimpleCursorAdapter adapter;
     TimePicker hora;
     String nombre="";
+
     /////////////////////////////////////
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
     static final int REQUEST_AUTHORIZATION = 1;
@@ -66,7 +77,9 @@ public class crear_examen extends ActionBarActivity{
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     GoogleAccountCredential credential;
     com.google.api.services.calendar.Calendar client;
+    CalendarModel model;
     int numAsyncTasks;
+    ArrayAdapter<CalendarInfo> adapter2;
 
 
     @Override
@@ -79,9 +92,12 @@ public class crear_examen extends ActionBarActivity{
         //int[]to=new int[]{android.R.id.text1,android.R.id.text2};
         String[] from = {EAsignatura.FIELD_NOMBRE};
         int[] to = new int[]{android.R.id.text1};
-        adapter= new SimpleCursorAdapter(this,android.R.layout.simple_spinner_item,cursor,from,to);
+        adapter= new SimpleCursorAdapter(this,android.R.layout.simple_list_item_1,cursor,from,to);
+
         spnClients = (Spinner) findViewById(R.id.spinner_id);
+        spnCal = (Spinner) findViewById(R.id.spinner_cal);
         spnClients.setAdapter(adapter);
+
         fecha=(TextView)findViewById(R.id.textView7);
         btn=(Button)findViewById(R.id.btnFecha);
         a=calendar.get(java.util.Calendar.YEAR);
@@ -94,6 +110,9 @@ public class crear_examen extends ActionBarActivity{
         hora=(TimePicker)findViewById(R.id.timePicker);
 
         client=ActividadPrincipal.client;
+        model=ActividadPrincipal.model;
+        new cal().execute();
+
 
 
 
@@ -172,10 +191,24 @@ public class crear_examen extends ActionBarActivity{
 
         @Override
         protected String doInBackground(String... params) {
-            String calendarId="hb2a3khkmlgt0gbel078t35v3g@group.calendar.google.com";
+            int id=spnCal.getSelectedItemPosition();
+            CalendarInfo CI = adapter2.getItem(id);
+            String calendarId=CI.id;
+            //String calendarId="hb2a3khkmlgt0gbel078t35v3g@group.calendar.google.com";
             Event event= new Event();
             event.setSummary(nombre);
             event.setLocation("Donostia");
+            Event.Reminders reminders=new Event.Reminders();
+            EventReminder eventReminder=new EventReminder();
+            eventReminder.setMethod("popup");
+            eventReminder.setMinutes(15);
+            ArrayList array_eventReminder=new ArrayList();
+            array_eventReminder.add(eventReminder);
+
+            reminders.setOverrides(array_eventReminder);
+            reminders.setUseDefault(false);
+            event.setReminders(reminders);
+
             Date startDate =calendar.getTime();
             DateTime start = new DateTime(startDate, TimeZone.getTimeZone("UTC+1"));
             event.setStart(new EventDateTime().setDateTime(start));
@@ -192,6 +225,81 @@ public class crear_examen extends ActionBarActivity{
             return calendarId;
         }
     }
+    private class cal extends AsyncTask<Boolean, Boolean, Boolean> {
+       // ProgressDialog pd;
+       CalendarList feed = null;
+        ProgressDialog pd;
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+
+            try {
+                feed = client.calendarList().list().setMinAccessRole("writer").setMinAccessRole("owner").setFields(CalendarInfo.FEED_FIELDS).execute();
+                return true;
+            } catch (UserRecoverableAuthIOException userRecoverableException) {
+                startActivityForResult(
+                        userRecoverableException.getIntent(), 1);
+                return false;
+            } catch (IOException e) {
+                Utils.logAndShow(crear_examen.this, "crearexamen", e);
+                return false;
+            }
+
+        }
+
+
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(crear_examen.this);
+            pd.setMessage("buscando calendarios");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (pd!=null){
+
+                pd.dismiss();
+            }
+            if (!result){
+
+            }else{
+                model.reset(feed.getItems());
+
+                adapter2 = new ArrayAdapter<CalendarInfo>(crear_examen.this, android.R.layout.simple_list_item_1, model.toSortedArray()) {
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        // by default it uses toString; override to use summary instead
+                        TextView view = (TextView) super.getView(position, convertView, parent);
+                        CalendarInfo calendarInfo = getItem(position);
+                        view.setText(calendarInfo.summary);
+                        return view;
+                    }
+
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        // by default it uses toString; override to use summary instead
+                        TextView view = (TextView) super.getView(position, convertView, parent);
+                        CalendarInfo calendarInfo = getItem(position);
+                        view.setText(calendarInfo.summary);
+                        return view;
+                    }
+                };
+                spnCal.setAdapter(adapter2);
+            }
+
+
+        }
+    }
+
+    ////////////////////////////////////////////////
     /*void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
         runOnUiThread(new Runnable() {
             public void run() {

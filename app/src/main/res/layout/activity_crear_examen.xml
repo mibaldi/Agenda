@@ -22,7 +22,20 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:spinnerMode="dialog" />
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Escoger Calendario donde guardar"
+        android:id="@+id/textView2" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_cal"
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:layout_width="wrap_content"

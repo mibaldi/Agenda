@@ -25,11 +25,11 @@ import com.google.api.services.calendar.model.CalendarListEntry;
  */
 public class CalendarInfo implements Comparable<CalendarInfo>, Cloneable {
 
-  static final String FIELDS = "id,summary";
-  static final String FEED_FIELDS = "items(" + FIELDS + ")";
+  public static final String FIELDS = "id,summary";
+  public static final String FEED_FIELDS = "items(" + FIELDS + ")";
 
-  String id;
-  String summary;
+  public String id;
+  public String summary;
 
   CalendarInfo(String id, String summary) {
     this.id = id;

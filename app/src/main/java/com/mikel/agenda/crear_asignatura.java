@@ -34,13 +34,14 @@ public class crear_asignatura extends ActionBarActivity {
     List<EditText> allEds = new ArrayList<EditText>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
         if ( savedInstanceState !=  null )
         {
             alist=savedInstanceState.getStringArrayList("allEds");
             et=savedInstanceState.getInt("et");
 
         }
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_asignatura);
         ll2 = (LinearLayout)findViewById(R.id.ll2);
         texto=(EditText)findViewById(R.id.texto);

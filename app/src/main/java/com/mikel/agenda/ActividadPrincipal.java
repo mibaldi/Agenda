@@ -4,9 +4,11 @@ package com.mikel.agenda;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -18,19 +20,22 @@ import android.view.View;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.CalendarScopes;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import BD.BD;
 import login.MainActivity;
+import mycalendar.CalendarInfo;
+import mycalendar.CalendarModel;
 ////////////////////////////
-
 
 public class ActividadPrincipal extends ActionBarActivity /*implements OnClickListener*/ {
     /////////////////////////////////////
@@ -44,11 +49,13 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
     public static GoogleAccountCredential credential;
     public static com.google.api.services.calendar.Calendar client;
+    public static CalendarModel model = new CalendarModel();
     int numAsyncTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_actividad_principal);
         BD helper= new BD(this);
         // enable logging
@@ -62,6 +69,8 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         client = new com.google.api.services.calendar.Calendar.Builder(
                 transport, jsonFactory, credential).setApplicationName("Baldugenda")
                 .build();
+
+        model = new CalendarModel();
 
     }
     @Override
@@ -231,6 +240,54 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 intent2 = new Intent(ActividadPrincipal.this, mycalendar.CalendarSampleActivity.class);
                 startActivity(intent2);
                 break;
+
+        }
+    }
+    private class cal extends AsyncTask<Boolean, Boolean, Boolean> {
+        // ProgressDialog pd;
+
+        ProgressDialog pd;
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+
+            try {
+
+                client.calendarList().list().setMinAccessRole("writer").setMinAccessRole("owner").setFields(CalendarInfo.FEED_FIELDS).execute();
+                return true;
+            } catch (UserRecoverableAuthIOException userRecoverableException) {
+                startActivityForResult(
+                        userRecoverableException.getIntent(), 1);
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+
+
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(ActividadPrincipal.this);
+            pd.setMessage("buscando calendarios");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (pd!=null){
+
+                pd.dismiss();
+            }
+
+
 
         }
     }

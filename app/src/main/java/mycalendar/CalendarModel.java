@@ -72,7 +72,7 @@ public class CalendarModel {
     }
   }
 
-  void reset(List<CalendarListEntry> calendarsToAdd) {
+  public void reset(List<CalendarListEntry> calendarsToAdd) {
     synchronized (calendars) {
       calendars.clear();
       for (CalendarListEntry calendarToAdd : calendarsToAdd) {
