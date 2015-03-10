@@ -51,7 +51,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
     public static com.google.api.services.calendar.Calendar client;
     public static CalendarModel model = new CalendarModel();
     int numAsyncTasks;
-
+    String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,6 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
         client = new com.google.api.services.calendar.Calendar.Builder(
                 transport, jsonFactory, credential).setApplicationName("Baldugenda")
                 .build();
-
         model = new CalendarModel();
 
     }
@@ -111,6 +110,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == Activity.RESULT_OK) {
+
                     //AsyncLoadCalendars.run(this);
                 } else {
                     chooseAccount();

@@ -2,6 +2,7 @@ package com.mikel.agenda;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -268,6 +269,8 @@ public class crear_examen extends ActionBarActivity{
                 pd.dismiss();
             }
             if (!result){
+                Intent i = new Intent(crear_examen.this, ActividadPrincipal.class);
+                startActivity(i);
 
             }else{
                 model.reset(feed.getItems());
