@@ -77,4 +77,19 @@
         android:text="hola"
         android:textSize="25dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextViewTipo"
+        android:text="Tipo de guardado:"
+        android:textSize="25dp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTipoGuardado"
+        android:text="hola"
+        android:textSize="25dp" />
+
 </LinearLayout>

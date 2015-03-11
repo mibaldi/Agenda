@@ -34,6 +34,7 @@ public class BD  extends SQLiteOpenHelper{
         valores.put(EExamen.FIELD_ASIGNATURA,examen.getAsignatura());
         valores.put(EExamen.FIELD_FECHA,examen.getFecha());
         valores.put(EExamen.FIELD_HORA,examen.getHora());
+        valores.put(EExamen.FIELD_TIPOGUARDADO,examen.getTipoGuardado());
         return valores;
     }
     public long  insertarAsignatura(EAsignatura asignatura){
@@ -66,7 +67,7 @@ public class BD  extends SQLiteOpenHelper{
         return c;
     }
     public Cursor getExamenesCursor(){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA};
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
         Cursor c= db.query(EExamen.TABLE_NAME,columnas,null,null,null,null,null);
         return c;
     }
@@ -96,7 +97,7 @@ public class BD  extends SQLiteOpenHelper{
 
     }
     public EExamen getEExamen(String ID){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA};
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
 
         Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ID+"=?",new String[]{ID},null,null,null);
         if (c.getCount()>0){
@@ -106,10 +107,12 @@ public class BD  extends SQLiteOpenHelper{
             String rowAsig= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_ASIGNATURA));
             String rowFecha= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_FECHA));
             String rowHora= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_HORA));
+            String rowTipoGuardado= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_TIPOGUARDADO));
             EExamen exa= new EExamen(rowName);
             exa.setAsignatura(rowAsig);
             exa.setFecha(rowFecha);
             exa.setHora(rowHora);
+            exa.setTipoGuardado(rowTipoGuardado);
             return exa;
         }else
             return null;

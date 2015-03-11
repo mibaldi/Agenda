@@ -2,7 +2,6 @@ package com.mikel.agenda;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,10 +29,8 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.EventReminder;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -81,6 +78,7 @@ public class crear_examen extends ActionBarActivity{
     CalendarModel model;
     int numAsyncTasks;
     ArrayAdapter<CalendarInfo> adapter2;
+    Boolean resp=false;
 
 
     @Override
@@ -164,25 +162,40 @@ public class crear_examen extends ActionBarActivity{
        DatePickerDialog dpd = new DatePickerDialog(this,mdpd,a,m,d);
         dpd.show();
     }
-    public void Guardar(View view){
-        BD  helper = new BD(crear_examen.this);
-        EExamen examen = new EExamen();
-        Cursor c= (Cursor)spnClients.getSelectedItem();
-        String text = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
-        nombre= etNombre.getText().toString();
-        if (nombre.matches("")){
-            Toast.makeText(getApplicationContext(), "Campo de nombre obligatorio ", Toast.LENGTH_SHORT).show();
-        }else{
+
+    public void Guardar(View view) {
+        String text = "";
+        nombre = etNombre.getText().toString();
+        if (spnClients.getCount() == 0) {
+            Toast.makeText(getApplicationContext(), "Campo Asignatura obligatorio ", Toast.LENGTH_SHORT).show();
+        }
+        else if(nombre.matches("")){
+            Toast.makeText(getApplicationContext(), "Campo Nombre obligatorio ", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Cursor c = (Cursor) spnClients.getSelectedItem();
+            text = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
+            BD helper = new BD(crear_examen.this);
+            EExamen examen = new EExamen();
             examen.setNombre(nombre);
             examen.setAsignatura(text);
             examen.setFecha(d + "/" + mes + "/" + a);
             calendar.set(java.util.Calendar.MINUTE, hora.getCurrentMinute());
             calendar.set(Calendar.HOUR_OF_DAY, hora.getCurrentHour());
-            String horaString = hora.getCurrentHour()+":"+hora.getCurrentMinute();
+            String horaString = hora.getCurrentHour() + ":" + hora.getCurrentMinute();
             examen.setHora(horaString);
-            helper.insertarExamen(examen);
-            new CallAPI().execute();
-            Toast.makeText(getApplicationContext(), "Examen guardado", Toast.LENGTH_SHORT).show();
+
+
+            if (resp) {
+                examen.setTipoGuardado("Ambos");
+                helper.insertarExamen(examen);
+                new CallAPI().execute();
+                Toast.makeText(getApplicationContext(), "Examen guardado en Local y en Google Calendar", Toast.LENGTH_SHORT).show();
+            } else {
+                examen.setTipoGuardado("Local");
+                helper.insertarExamen(examen);
+                Toast.makeText(getApplicationContext(), "Examen guardado en local", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -195,11 +208,10 @@ public class crear_examen extends ActionBarActivity{
             int id=spnCal.getSelectedItemPosition();
             CalendarInfo CI = adapter2.getItem(id);
             String calendarId=CI.id;
-            //String calendarId="hb2a3khkmlgt0gbel078t35v3g@group.calendar.google.com";
             Event event= new Event();
             event.setSummary(nombre);
             event.setLocation("Donostia");
-            Event.Reminders reminders=new Event.Reminders();
+            /*Event.Reminders reminders=new Event.Reminders();
             EventReminder eventReminder=new EventReminder();
             eventReminder.setMethod("popup");
             eventReminder.setMinutes(15);
@@ -208,7 +220,7 @@ public class crear_examen extends ActionBarActivity{
 
             reminders.setOverrides(array_eventReminder);
             reminders.setUseDefault(false);
-            event.setReminders(reminders);
+            event.setReminders(reminders);*/
 
             Date startDate =calendar.getTime();
             DateTime start = new DateTime(startDate, TimeZone.getTimeZone("UTC+1"));
@@ -269,10 +281,12 @@ public class crear_examen extends ActionBarActivity{
                 pd.dismiss();
             }
             if (!result){
-                Intent i = new Intent(crear_examen.this, ActividadPrincipal.class);
-                startActivity(i);
+
+                /*Intent i = new Intent(crear_examen.this, ActividadPrincipal.class);
+                startActivity(i);*/
 
             }else{
+                resp=result;
                 model.reset(feed.getItems());
 
                 adapter2 = new ArrayAdapter<CalendarInfo>(crear_examen.this, android.R.layout.simple_list_item_1, model.toSortedArray()) {

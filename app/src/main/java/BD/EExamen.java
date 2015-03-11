@@ -10,12 +10,14 @@ public class EExamen {
     public static final String FIELD_ASIGNATURA = "asignatura";
     public static final String FIELD_FECHA = "fecha";
     public static final String FIELD_HORA = "hora";
+    public static final String FIELD_TIPOGUARDADO = "tipoGuardado";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + " ( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
                                                   FIELD_NOMBRE + " text unique,"+
                                                   FIELD_ASIGNATURA +" text,"+
                                                   FIELD_FECHA +" text,"+
                                                   FIELD_HORA +" text,"+
+                                                  FIELD_TIPOGUARDADO  +" text,"+
                                                   "FOREIGN KEY ( "+FIELD_ASIGNATURA+" ) REFERENCES "+EAsignatura.TABLE_NAME+" ( "+EAsignatura.FIELD_NOMBRE+" )"
                                                   + " );";
     private int id;
@@ -23,6 +25,7 @@ public class EExamen {
     private String asignatura;
     private String fecha;
     private String hora;
+    private String tipoGuardado;
 
     public EExamen(String nombre) {
         this.nombre = nombre;
@@ -69,5 +72,13 @@ public class EExamen {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public String getTipoGuardado() {
+        return tipoGuardado;
+    }
+
+    public void setTipoGuardado(String tipoGuardado) {
+        this.tipoGuardado = tipoGuardado;
     }
 }

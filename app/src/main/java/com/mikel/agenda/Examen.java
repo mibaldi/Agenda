@@ -1,21 +1,20 @@
 package com.mikel.agenda;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import BD.*;
+import BD.BD;
+import BD.EExamen;
 
 
 public class Examen extends ActionBarActivity {
     private BD helper;
-    private TextView nombre,nombreAsig,fecha,hora;
+    private TextView nombre,nombreAsig,fecha,hora,tipoGuardado;
     private String ID;
     private EExamen ExamenEscogido;
     @Override
@@ -31,11 +30,13 @@ public class Examen extends ActionBarActivity {
         nombreAsig= (TextView)findViewById(R.id.nombreAsig);
         fecha= (TextView)findViewById(R.id.fecha);
         hora= (TextView)findViewById(R.id.hora);
+        tipoGuardado= (TextView)findViewById(R.id.tvTipoGuardado);
         if (ExamenEscogido!=null){
             nombre.setText(ExamenEscogido.getNombre());
             nombreAsig.setText(ExamenEscogido.getAsignatura());
             fecha.setText(ExamenEscogido.getFecha());
             hora.setText(ExamenEscogido.getHora());
+            tipoGuardado.setText(ExamenEscogido.getTipoGuardado());
 
 
         }else{
