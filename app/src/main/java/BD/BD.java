@@ -63,12 +63,20 @@ public class BD  extends SQLiteOpenHelper{
     }
     public Cursor getAsignaturasCursor(){
         String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES,EAsignatura.FIELD_EVALUACION};
-        Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,null);
+        String orderBy =  EAsignatura.FIELD_NOMBRE;
+        Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,orderBy);
         return c;
     }
     public Cursor getExamenesCursor(){
         String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
-        Cursor c= db.query(EExamen.TABLE_NAME,columnas,null,null,null,null,null);
+        String orderBy =  EExamen.FIELD_ASIGNATURA;
+        Cursor c= db.query(EExamen.TABLE_NAME,columnas,null,null,null,null,orderBy);
+        return c;
+    }
+    public Cursor getExamenesAsignaturaCursor(String Asignatura){
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
+        String orderBy =  EExamen.FIELD_ASIGNATURA;
+        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ASIGNATURA+"=?",new String[]{Asignatura},null,null,orderBy);
         return c;
     }
     public Cursor buscarAsignatura(String nombre){
@@ -77,7 +85,13 @@ public class BD  extends SQLiteOpenHelper{
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
         return c;
     }
-    public EAsignatura getAsignaturaObj(String ID){
+    public Cursor buscarExamen(String nombre){
+
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
+        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
+        return c;
+    }
+   public EAsignatura getEAsignatura(String ID){
         String columnas[]={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_ENLACES,EAsignatura.FIELD_EVALUACION};
 
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,EAsignatura.FIELD_ID+"=?",new String[]{ID},null,null,null);
@@ -93,9 +107,8 @@ public class BD  extends SQLiteOpenHelper{
         return asig;
         }else
             return null;
-
-
     }
+
     public EExamen getEExamen(String ID){
         String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
 

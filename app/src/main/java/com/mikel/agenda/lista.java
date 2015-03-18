@@ -3,22 +3,20 @@ package com.mikel.agenda;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
-import BD.*;
+import BD.BD;
+import BD.EAsignatura;
 
 
 public class lista extends ActionBarActivity implements View.OnClickListener {
@@ -36,7 +34,7 @@ public class lista extends ActionBarActivity implements View.OnClickListener {
         bt=(ImageButton)findViewById(R.id.imageButton);
         objAsignaturas = new BD(this);
         cursor=objAsignaturas.getAsignaturasCursor();
-        String[]from={EAsignatura.FIELD_ID,EAsignatura.FIELD_NOMBRE};
+        String[]from={EAsignatura.FIELD_NOMBRE,EAsignatura.FIELD_EVALUACION};
         int[]to=new int[]{android.R.id.text1,android.R.id.text2};
         list=(ListView)findViewById(R.id.lista_listView);
         adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);

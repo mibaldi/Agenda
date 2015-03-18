@@ -1,8 +1,8 @@
 package com.mikel.agenda;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import BD.*;
-import objetos.AsignaturaObj;
+import BD.BD;
+import BD.EAsignatura;
 
 
 public class Asignatura extends ActionBarActivity {
@@ -29,7 +29,7 @@ public class Asignatura extends ActionBarActivity {
         LinearLayout ll= (LinearLayout)findViewById(R.id.LlAsignatura);
         Log.e("ID", ID);
         objAsignaturas = new BD(this);
-        asigEscogida=objAsignaturas.getAsignaturaObj(ID);
+        asigEscogida=objAsignaturas.getEAsignatura(ID);
         nombreAsig= (TextView)findViewById(R.id.NombreAsig);
         eval= (TextView)findViewById(R.id.eval);
         if (asigEscogida!=null){

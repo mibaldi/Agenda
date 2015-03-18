@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.api.client.util.Joiner;
+import com.splunk.mint.Mint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,7 @@ public class crear_asignatura extends ActionBarActivity {
         btGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Mint.logEvent("Button1 pressed");
                 BD  helper = new BD(crear_asignatura.this);
                 EAsignatura asig = new EAsignatura();
                 if (texto.getText().toString().matches("")) {
@@ -94,6 +96,7 @@ public class crear_asignatura extends ActionBarActivity {
                     radioEleccion=(RadioButton)findViewById(selectId);
                     asig.setEvaluacion(radioEleccion.getText().toString());
                     long res=helper.insertarAsignatura(asig);
+
                     if (res!=-1){
                         Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_SHORT).show();}
                     else Toast.makeText(getApplicationContext(), "No se ha guardado la asignatura", Toast.LENGTH_SHORT).show();

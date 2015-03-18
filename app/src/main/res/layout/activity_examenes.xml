@@ -8,11 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <ListView
+        <!--<ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Lista2"
-            android:choiceMode="singleChoice" />
+            android:choiceMode="singleChoice" />-->
+        <ExpandableListView
+        android:id="@+id/Lista2"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
     </FrameLayout>
     <ListView
         android:id="@+id/left_drawer"
@@ -21,4 +25,5 @@
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:background="#111"/>
+
 </android.support.v4.widget.DrawerLayout>

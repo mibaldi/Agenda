@@ -37,7 +37,7 @@ import mycalendar.CalendarInfo;
 import mycalendar.CalendarModel;
 ////////////////////////////
 
-public class ActividadPrincipal extends ActionBarActivity /*implements OnClickListener*/ {
+public class ActividadPrincipal extends ActionBarActivity {
     /////////////////////////////////////
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
     static final int REQUEST_AUTHORIZATION = 1;
@@ -55,8 +55,10 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // TODO: Update with your API key
+       // Mint.initAndStartSession(ActividadPrincipal.this, "8df501b1");
         setContentView(R.layout.activity_actividad_principal);
+
         BD helper= new BD(this);
         // enable logging
         Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
@@ -224,6 +226,7 @@ public class ActividadPrincipal extends ActionBarActivity /*implements OnClickLi
                 startActivity(intent1);
                 break;
             case R.id.button5:
+                //Mint.logEvent("Button1 pressed");
                 intent2 = new Intent(ActividadPrincipal.this, crear_asignatura.class);
                 startActivity(intent2);
                 break;

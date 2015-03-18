@@ -1,5 +1,5 @@
-apply plugin: 'com.android.application'
-
+//apply plugin: 'com.android.application'
+apply plugin: 'android'
 android {
     signingConfigs {
         debug {
@@ -21,13 +21,13 @@ android {
         applicationId "com.mikel.agenda"
         minSdkVersion 10
         targetSdkVersion 21
-        versionCode 4
-        versionName "2.1.1"
+        versionCode 5
+        versionName "2.1.2"
         signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -51,4 +51,5 @@ dependencies {
     compile('com.google.http-client:google-http-client-gson:1.17.0-rc') {
         exclude module: 'httpclient'
     }
+    compile files('libs/mint-4.1.jar')
 }
