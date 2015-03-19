@@ -1,7 +1,9 @@
 package com.mikel.agenda;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -79,6 +81,15 @@ public class crear_examen extends ActionBarActivity{
     int numAsyncTasks;
     ArrayAdapter<CalendarInfo> adapter2;
     Boolean resp=false;
+    String calendarId,eventoId="";
+    EExamen examen;
+    BD helper;
+
+    private TextView mTimeDisplay;
+    private Button mPickTime;
+    private int mHour;
+    private int mMinute;
+    static final int TIME_DIALOG_ID = 0;
 
 
     @Override
@@ -87,8 +98,7 @@ public class crear_examen extends ActionBarActivity{
         setContentView(R.layout.activity_crear_examen);
         objAsignaturas = new BD(this);
         cursor=objAsignaturas.getAsignaturasCursor();
-        //String[]from={EAsignatura.FIELD_ID, };
-        //int[]to=new int[]{android.R.id.text1,android.R.id.text2};
+
         String[] from = {EAsignatura.FIELD_NOMBRE};
         int[] to = new int[]{android.R.id.text1};
         adapter= new SimpleCursorAdapter(this,android.R.layout.simple_list_item_1,cursor,from,to);
@@ -106,7 +116,17 @@ public class crear_examen extends ActionBarActivity{
         fecha.setText(d+"/"+mes+"/"+a);
         guardar=(Button)findViewById(R.id.GuardarExamen);
         etNombre= (EditText) findViewById(R.id.editText2);
-        hora=(TimePicker)findViewById(R.id.timePicker);
+        mTimeDisplay =(TextView) findViewById(R.id.textView8);
+        mPickTime=(Button)findViewById(R.id.button3);
+        mPickTime.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                showDialog(TIME_DIALOG_ID);
+            }
+        });
+
+        mHour = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute=calendar.get(Calendar.MINUTE);
+        updateDisplay();
 
         client=ActividadPrincipal.client;
         model=ActividadPrincipal.model;
@@ -116,32 +136,63 @@ public class crear_examen extends ActionBarActivity{
 
 
     }
-    /* @Override
-     protected void onResume() {
-         super.onResume();
-         if (checkGooglePlayServicesAvailable()) {
-             haveGooglePlayServices();
-         }
-     }
+    private void updateDisplay(){
+        mPickTime.setText(
+                new StringBuilder()
+                .append(pad(mHour)).append(":")
+                .append(pad(mMinute)));
+    }
+    private static String pad(int c){
+        if (c>=10)
+            return String.valueOf(c);
+        else
+            return "0"+ String.valueOf(c);
+    }
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+            new TimePickerDialog.OnTimeSetListener(){
+                public void onTimeSet(TimePicker view, int hourOfDay,int minute){
+                  mHour=hourOfDay;
+                  mMinute=minute;
+                    updateDisplay();
+                }
+            };
 
-     public boolean onCreateOptionsMenu(Menu menu) {
-         MenuInflater inflater = getMenuInflater();
-         inflater.inflate(R.menu.main_menu, menu);
-         return super.onCreateOptionsMenu(menu);
-     }
-     verride
-    /* public boolean onOptionsItemSelected(MenuItem item) {
-         switch (item.getItemId()) {
-             case R.id.menu_refresh:
-                 //AsyncLoadCalendars.run(this);
-                 break;
-             case R.id.menu_accounts:
-                 chooseAccount();
-                 return true;
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id){
+            case TIME_DIALOG_ID:
+                return new TimePickerDialog(this,
+                        mTimeSetListener,mHour,mMinute,false);
+        }
+        return null;
+    }
+
+    /* @Override
+         protected void onResume() {
+             super.onResume();
+             if (checkGooglePlayServicesAvailable()) {
+                 haveGooglePlayServices();
+             }
          }
-         return super.onOptionsItemSelected(item);
-     }
- */
+
+         public boolean onCreateOptionsMenu(Menu menu) {
+             MenuInflater inflater = getMenuInflater();
+             inflater.inflate(R.menu.main_menu, menu);
+             return super.onCreateOptionsMenu(menu);
+         }
+         verride
+        /* public boolean onOptionsItemSelected(MenuItem item) {
+             switch (item.getItemId()) {
+                 case R.id.menu_refresh:
+                     //AsyncLoadCalendars.run(this);
+                     break;
+                 case R.id.menu_accounts:
+                     chooseAccount();
+                     return true;
+             }
+             return super.onOptionsItemSelected(item);
+         }
+     */
     public void EscogerFecha(View view){
         DatePickerDialog.OnDateSetListener mdpd=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -175,20 +226,20 @@ public class crear_examen extends ActionBarActivity{
         else {
             Cursor c = (Cursor) spnClients.getSelectedItem();
             text = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
-            BD helper = new BD(crear_examen.this);
-            EExamen examen = new EExamen();
+             helper= new BD(crear_examen.this);
+             examen= new EExamen();
             examen.setNombre(nombre);
             examen.setAsignatura(text);
             examen.setFecha(d + "/" + mes + "/" + a);
-            calendar.set(java.util.Calendar.MINUTE, hora.getCurrentMinute());
-            calendar.set(Calendar.HOUR_OF_DAY, hora.getCurrentHour());
-            String horaString = hora.getCurrentHour() + ":" + hora.getCurrentMinute();
+            calendar.set(java.util.Calendar.MINUTE,mMinute);
+            calendar.set(Calendar.HOUR_OF_DAY, mHour);
+
+            String horaString = mPickTime.getText().toString();
             examen.setHora(horaString);
 
 
             if (resp) {
                 examen.setTipoGuardado("Ambos");
-                helper.insertarExamen(examen);
                 new CallAPI().execute();
                 Toast.makeText(getApplicationContext(), "Examen guardado en Local y en Google Calendar", Toast.LENGTH_SHORT).show();
             } else {
@@ -207,8 +258,9 @@ public class crear_examen extends ActionBarActivity{
         protected String doInBackground(String... params) {
             int id=spnCal.getSelectedItemPosition();
             CalendarInfo CI = adapter2.getItem(id);
-            String calendarId=CI.id;
+            calendarId=CI.id;
             Event event= new Event();
+
             event.setSummary(nombre);
             event.setLocation("Donostia");
             /*Event.Reminders reminders=new Event.Reminders();
@@ -232,6 +284,10 @@ public class crear_examen extends ActionBarActivity{
             try {
 
                 Event createdEvent = client.events().insert(calendarId, event).execute();
+                eventoId=createdEvent.getId();
+                examen.setCalendarioid(calendarId);
+                examen.setEventoid(eventoId);
+                helper.insertarExamen(examen);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -50,16 +50,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText2" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView" />
-    </RelativeLayout>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,11 +71,17 @@
         android:id="@+id/btnFecha"
         android:onClick="EscogerFecha" />
 
-    <TimePicker
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timePicker"
-        android:timePickerMode="spinner"/>
+        android:text="Hora Inicio"
+        android:id="@+id/textView8" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hora Inicio"
+        android:id="@+id/button3" />
 
     <Button
         android:layout_width="wrap_content"

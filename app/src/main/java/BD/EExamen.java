@@ -11,6 +11,8 @@ public class EExamen {
     public static final String FIELD_FECHA = "fecha";
     public static final String FIELD_HORA = "hora";
     public static final String FIELD_TIPOGUARDADO = "tipoGuardado";
+    public static final String FIELD_CALENDARIOID = "calendarioid";
+    public static final String FIELD_EVENTOID = "eventoid";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + " ( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
                                                   FIELD_NOMBRE + " text unique,"+
@@ -18,6 +20,8 @@ public class EExamen {
                                                   FIELD_FECHA +" text,"+
                                                   FIELD_HORA +" text,"+
                                                   FIELD_TIPOGUARDADO  +" text,"+
+                                                  FIELD_CALENDARIOID +" text,"+
+                                                  FIELD_EVENTOID  +" text,"+
                                                   "FOREIGN KEY ( "+FIELD_ASIGNATURA+" ) REFERENCES "+EAsignatura.TABLE_NAME+" ( "+EAsignatura.FIELD_NOMBRE+" )"
                                                   + " );";
     private int id;
@@ -26,6 +30,10 @@ public class EExamen {
     private String fecha;
     private String hora;
     private String tipoGuardado;
+    private String calendarioid;
+    private String eventoid;
+
+
 
     public EExamen(String nombre) {
         this.nombre = nombre;
@@ -80,5 +88,20 @@ public class EExamen {
 
     public void setTipoGuardado(String tipoGuardado) {
         this.tipoGuardado = tipoGuardado;
+    }
+    public String getCalendarioid() {
+        return calendarioid;
+    }
+
+    public void setCalendarioid(String calendarioid) {
+        this.calendarioid = calendarioid;
+    }
+
+    public String getEventoid() {
+        return eventoid;
+    }
+
+    public void setEventoid(String eventoid) {
+        this.eventoid = eventoid;
     }
 }

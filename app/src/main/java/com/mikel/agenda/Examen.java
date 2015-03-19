@@ -1,12 +1,16 @@
 package com.mikel.agenda;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 import BD.BD;
 import BD.EExamen;
@@ -17,6 +21,7 @@ public class Examen extends ActionBarActivity {
     private TextView nombre,nombreAsig,fecha,hora,tipoGuardado;
     private String ID;
     private EExamen ExamenEscogido;
+    com.google.api.services.calendar.Calendar client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +30,7 @@ public class Examen extends ActionBarActivity {
         ID=intent.getStringExtra("ID");
         Log.e("ID", ID);
         helper = new BD(this);
+        client=ActividadPrincipal.client;
         ExamenEscogido=helper.getEExamen(ID);
         nombre= (TextView)findViewById(R.id.nombreExamen);
         nombreAsig= (TextView)findViewById(R.id.nombreAsig);
@@ -67,4 +73,30 @@ public class Examen extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    public void borrar(View view){
+        new CallAPI().execute();
+
+    }
+    private class CallAPI extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                client.events().delete(ExamenEscogido.getCalendarioid(),ExamenEscogido.getEventoid()).execute();
+                helper.deleteExamen(ID);
+                Intent intent1 = new Intent(Examen.this, Examenes.class);
+                startActivity(intent1);
+                finish();
+            } catch (IOException e) {
+                helper.deleteExamen(ID);
+                Intent intent1 = new Intent(Examen.this, Examenes.class);
+                startActivity(intent1);
+                finish();
+            }
+            return null;
+        }
+    }
+
+
 }

@@ -204,7 +204,12 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
         }
         cajon.closeDrawer(opciones);
     }
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(getBaseContext(), ActividadPrincipal.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+        finish();
+    }
 
     /**METODOS PARA MANEJAR LA APERTURA Y CIERRE DEL NAVIGATION DRAWER DESDE EL ICONO DE LA APLICACION**/
     @Override
@@ -252,7 +257,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
 
 
-        asignaturas=helper.getAsignaturasCursor();
+        asignaturas=helper.getAsignaturasExamenesCursor();
 
         List<List>listas=new ArrayList<List>();
         listDataHeader = new ArrayList<String>();

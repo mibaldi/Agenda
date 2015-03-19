@@ -35,6 +35,8 @@ public class BD  extends SQLiteOpenHelper{
         valores.put(EExamen.FIELD_FECHA,examen.getFecha());
         valores.put(EExamen.FIELD_HORA,examen.getHora());
         valores.put(EExamen.FIELD_TIPOGUARDADO,examen.getTipoGuardado());
+        valores.put(EExamen.FIELD_CALENDARIOID,examen.getCalendarioid());
+        valores.put(EExamen.FIELD_EVENTOID,examen.getEventoid());
         return valores;
     }
     public long  insertarAsignatura(EAsignatura asignatura){
@@ -67,14 +69,19 @@ public class BD  extends SQLiteOpenHelper{
         Cursor c= db.query(EAsignatura.TABLE_NAME,columnas,null,null,null,null,orderBy);
         return c;
     }
+    public Cursor getAsignaturasExamenesCursor(){
+        String consulta= "select distinct asignaturas.nombre from asignaturas,examenes where asignaturas.nombre=examenes.asignatura";
+       Cursor c= db.rawQuery(consulta,null);
+        return c;
+    }
     public Cursor getExamenesCursor(){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
         String orderBy =  EExamen.FIELD_ASIGNATURA;
         Cursor c= db.query(EExamen.TABLE_NAME,columnas,null,null,null,null,orderBy);
         return c;
     }
     public Cursor getExamenesAsignaturaCursor(String Asignatura){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
         String orderBy =  EExamen.FIELD_ASIGNATURA;
         Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ASIGNATURA+"=?",new String[]{Asignatura},null,null,orderBy);
         return c;
@@ -86,8 +93,7 @@ public class BD  extends SQLiteOpenHelper{
         return c;
     }
     public Cursor buscarExamen(String nombre){
-
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
         Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
         return c;
     }
@@ -110,7 +116,7 @@ public class BD  extends SQLiteOpenHelper{
     }
 
     public EExamen getEExamen(String ID){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO};
+        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
 
         Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ID+"=?",new String[]{ID},null,null,null);
         if (c.getCount()>0){
@@ -121,16 +127,26 @@ public class BD  extends SQLiteOpenHelper{
             String rowFecha= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_FECHA));
             String rowHora= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_HORA));
             String rowTipoGuardado= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_TIPOGUARDADO));
+            String rowCalendarioId= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_CALENDARIOID));
+            String rowEventoId= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_EVENTOID));
             EExamen exa= new EExamen(rowName);
             exa.setAsignatura(rowAsig);
             exa.setFecha(rowFecha);
             exa.setHora(rowHora);
             exa.setTipoGuardado(rowTipoGuardado);
+            exa.setCalendarioid(rowCalendarioId);
+            exa.setEventoid(rowEventoId);
             return exa;
         }else
             return null;
 
 
+    }
+    public void deleteExamen(String ID){
+        int id=Integer.valueOf(ID);
+
+        String consulta= "delete from examenes where _id="+id;
+        db.execSQL(consulta);
     }
 
     @Override
