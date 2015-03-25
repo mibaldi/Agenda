@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -60,7 +58,7 @@ public class lista extends ActionBarActivity implements View.OnClickListener {
 
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_lista, menu);
@@ -80,7 +78,7 @@ public class lista extends ActionBarActivity implements View.OnClickListener {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onClick(View v) {

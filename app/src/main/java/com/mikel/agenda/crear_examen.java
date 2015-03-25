@@ -58,7 +58,7 @@ public class crear_examen extends ActionBarActivity{
     Button btn,guardar;
     TextView fecha;
     Spinner spnClients,spnCal;
-    EditText etNombre;
+    EditText etNombre,etvalor;
     private BD objAsignaturas;
     private Cursor cursor;
     private ListView list;
@@ -116,6 +116,7 @@ public class crear_examen extends ActionBarActivity{
         fecha.setText(d+"/"+mes+"/"+a);
         guardar=(Button)findViewById(R.id.GuardarExamen);
         etNombre= (EditText) findViewById(R.id.editText2);
+       // etvalor= (EditText) findViewById(R.id.valor);
         mTimeDisplay =(TextView) findViewById(R.id.textView8);
         mPickTime=(Button)findViewById(R.id.button3);
         mPickTime.setOnClickListener(new View.OnClickListener(){
@@ -123,6 +124,7 @@ public class crear_examen extends ActionBarActivity{
                 showDialog(TIME_DIALOG_ID);
             }
         });
+        //etvalor.setFilters(new InputFilter[]{new InputFilterMinMax("1", "100")});
 
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute=calendar.get(Calendar.MINUTE);

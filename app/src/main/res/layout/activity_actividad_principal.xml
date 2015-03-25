@@ -18,7 +18,8 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center|center_horizontal">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +35,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="login"
+                android:text="Ayuda/Contacto"
                 android:id="@+id/bt_login"
                 android:onClick="onClickButton"
                 />
@@ -45,7 +46,8 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center|center_horizontal">
 
             <Button
                 android:layout_width="wrap_content"
@@ -65,7 +67,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="calendario"
+                android:text="Manejo de calendarios"
                 android:id="@+id/calendario"
 
                 android:onClick="onClickButton"

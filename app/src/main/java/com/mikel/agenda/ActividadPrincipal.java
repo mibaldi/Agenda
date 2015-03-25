@@ -25,6 +25,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.CalendarScopes;
+import com.splunk.mint.Mint;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -32,7 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import BD.BD;
-import login.MainActivity;
 import mycalendar.CalendarInfo;
 import mycalendar.CalendarModel;
 ////////////////////////////
@@ -56,7 +56,7 @@ public class ActividadPrincipal extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: Update with your API key
-       // Mint.initAndStartSession(ActividadPrincipal.this, "8df501b1");
+        Mint.initAndStartSession(ActividadPrincipal.this, "8df501b1");
         setContentView(R.layout.activity_actividad_principal);
 
         BD helper= new BD(this);
@@ -237,7 +237,7 @@ public class ActividadPrincipal extends ActionBarActivity {
                 startActivity(intent2);
                 break;
             case R.id.bt_login:
-                intent2 = new Intent(ActividadPrincipal.this, MainActivity.class);
+                intent2 = new Intent(ActividadPrincipal.this, Contacto.class);
                 startActivity(intent2);
                 break;
             case R.id.calendario:

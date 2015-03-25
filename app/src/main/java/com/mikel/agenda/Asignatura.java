@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,7 +52,7 @@ public class Asignatura extends ActionBarActivity {
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_asignatura, menu);
@@ -74,5 +72,5 @@ public class Asignatura extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

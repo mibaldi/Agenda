@@ -241,7 +241,7 @@ adb shell setprop log.tag.HttpTransport DEBUG
     menu.add(0, CONTEXT_EDIT, 0, R.string.edit);
     menu.add(0, CONTEXT_DELETE, 0, R.string.delete);
     menu.add(0, CONTEXT_BATCH_ADD, 0, R.string.batchadd);
-      menu.add(0, 3, 0, "Agregar evento");
+     // menu.add(0, 3, 0, "Agregar evento");
   }
 
   @Override
@@ -254,9 +254,9 @@ adb shell setprop log.tag.HttpTransport DEBUG
         case CONTEXT_EDIT:
           startAddOrEditCalendarActivity(calendarInfo);
           return true;
-        case 3:
+       /* case 3:
           new events(CalendarSampleActivity.this,calendarInfo).execute();
-           return true;
+           return true;*/
         case CONTEXT_DELETE:
           new AlertDialog.Builder(this).setTitle(R.string.delete_title)
               .setMessage(calendarInfo.summary)
