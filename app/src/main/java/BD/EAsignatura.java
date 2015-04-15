@@ -4,21 +4,26 @@ package BD;
  * Created by Mikel on 03/02/2015.
  */
 public class EAsignatura {
-    public static final String TABLE_NAME= "asignaturas";
+    public static final String TABLE_NAME = "asignaturas";
     public static final String FIELD_ID = "_id";
     public static final String FIELD_NOMBRE = "nombre";
     public static final String FIELD_ENLACES = "enlaces";
     public static final String FIELD_EVALUACION = "evaluacion";
+    public static final String FIELD_NOTA = "nota";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + "( " +
-                                                  FIELD_ID  + " integer primary key autoincrement,"+
-                                                  FIELD_NOMBRE + " text unique not null,"+
-                                                  FIELD_ENLACES + " text,"+
-                                                  FIELD_EVALUACION + " text"
-                                                  + " );";
+            FIELD_ID + " integer primary key autoincrement," +
+            FIELD_NOMBRE + " text unique not null," +
+            FIELD_ENLACES + " text," +
+            FIELD_EVALUACION + " text" +
+            FIELD_NOTA + " integer"
+            + " );";
     private int id;
     private String nombre;
     private String enlaces;
     private String evaluacion;
+
+
+    private int nota;
 
     public EAsignatura(String nombre) {
         this.nombre = nombre;
@@ -57,5 +62,13 @@ public class EAsignatura {
 
     public void setEvaluacion(String evaluacion) {
         this.evaluacion = evaluacion;
+    }
+
+    public int getNota() {
+        return nota;
+    }
+
+    public void setNota(int nota) {
+        this.nota = nota;
     }
 }

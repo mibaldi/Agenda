@@ -38,9 +38,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.Level;
 
-import BD.BD;
-import BD.EAsignatura;
-import BD.EExamen;
+import BD.*;
 import mycalendar.CalendarInfo;
 import mycalendar.CalendarModel;
 import mycalendar.Utils;
@@ -83,6 +81,7 @@ public class crear_examen extends ActionBarActivity{
     Boolean resp=false;
     String calendarId,eventoId="";
     EExamen examen;
+    ENota nota;
     BD helper;
 
     private TextView mTimeDisplay;
@@ -90,6 +89,7 @@ public class crear_examen extends ActionBarActivity{
     private int mHour;
     private int mMinute;
     static final int TIME_DIALOG_ID = 0;
+    long respuesta=0;
 
 
     @Override
@@ -164,7 +164,7 @@ public class crear_examen extends ActionBarActivity{
         switch (id){
             case TIME_DIALOG_ID:
                 return new TimePickerDialog(this,
-                        mTimeSetListener,mHour,mMinute,false);
+                        mTimeSetListener,mHour,mMinute,true);//true para 24 horas
         }
         return null;
     }
@@ -239,15 +239,27 @@ public class crear_examen extends ActionBarActivity{
             String horaString = mPickTime.getText().toString();
             examen.setHora(horaString);
 
+           ////PRUEBA
+            nota=new ENota();
+            nota.setAsignatura(text);
+            nota.setExamen(nombre);
+            nota.setNota(9);
+            nota.setNota_sobre(10);
+            ///////
 
             if (resp) {
                 examen.setTipoGuardado("Ambos");
                 new CallAPI().execute();
-                Toast.makeText(getApplicationContext(), "Examen guardado en Local y en Google Calendar", Toast.LENGTH_SHORT).show();
+
+
             } else {
                 examen.setTipoGuardado("Local");
-                helper.insertarExamen(examen);
-                Toast.makeText(getApplicationContext(), "Examen guardado en local", Toast.LENGTH_SHORT).show();
+               respuesta= helper.insertarExamen(examen);
+                if (respuesta==-1){
+                    Toast.makeText(getApplicationContext(), "No se ha podido insertar en local", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Examen guardado en local", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -289,11 +301,27 @@ public class crear_examen extends ActionBarActivity{
                 eventoId=createdEvent.getId();
                 examen.setCalendarioid(calendarId);
                 examen.setEventoid(eventoId);
-                helper.insertarExamen(examen);
+                respuesta=helper.insertarExamen(examen);
+                if(respuesta==-1){
+                    client.events().delete(calendarId,eventoId).execute();
+                }else{
+                    helper.insertarNota(nota);
+                }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return calendarId;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (respuesta==-1){
+                Toast.makeText(getApplicationContext(), "No se ha podido insertar", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "Examen guardado en Local y en Google Calendar", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     private class cal extends AsyncTask<Boolean, Boolean, Boolean> {

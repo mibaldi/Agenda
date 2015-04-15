@@ -1,82 +1,214 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".ActividadPrincipal">
-
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".ActividadPrincipal">
 
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_width="fill_parent"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/txBienvenida"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center|center_horizontal">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Asignaturas"
-                android:id="@+id/button"
-                android:onClick="onClickButton" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Crear Asignatura"
-                android:id="@+id/button5"
-                android:onClick="onClickButton" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ayuda/Contacto"
-                android:id="@+id/bt_login"
-                android:onClick="onClickButton"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center|center_horizontal">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Examenes"
-                android:id="@+id/button2"
-                android:onClick="onClickButton" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Crear Examen"
-                android:id="@+id/CrearExamen"
-
-                android:onClick="onClickButton" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Manejo de calendarios"
-                android:id="@+id/calendario"
-
-                android:onClick="onClickButton"
-                android:nestedScrollingEnabled="false" />
-
-        </LinearLayout>
-
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="MENU PRINCIPAL"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1">
 
-</RelativeLayout>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#8BC34A"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingRight="20px"
+                android:showDividers="middle|beginning|end" >
+
+                <Button
+                    android:id="@+id/bt_listaAsignaturas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_asignaturas"
+                    android:onClick="onClickButton" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Lista Asignaturas"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#2196F3"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="20px">
+
+                <Button
+                    android:id="@+id/bt_listaExámenes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_examenes"
+                    android:onClick="onClickButton" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Lista Exámenes"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#009688"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingRight="20px">
+
+                <Button
+                    android:id="@+id/bt_asignatura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_asignatura"
+                    android:onClick="onClickButton"
+                    android:padding="20px" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Crear Asignatura"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#3F51B5"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="20px">
+
+                <Button
+                    android:id="@+id/bt_examen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_examen"
+                    android:onClick="onClickButton" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Crear Examen"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#F44336"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingRight="20px">
+
+                <Button
+                    android:id="@+id/bt_calendarios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_calendario"
+                    android:onClick="onClickButton" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Calendarios"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#FFC107"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="20px">
+
+                <Button
+                    android:id="@+id/bt_ayuda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_help"
+                    android:onClick="onClickButton" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Contacto"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

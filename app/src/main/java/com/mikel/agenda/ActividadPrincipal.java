@@ -52,12 +52,14 @@ public class ActividadPrincipal extends ActionBarActivity {
     public static CalendarModel model = new CalendarModel();
     int numAsyncTasks;
     String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: Update with your API key
         Mint.initAndStartSession(ActividadPrincipal.this, "8df501b1");
         setContentView(R.layout.activity_actividad_principal);
+
 
         BD helper= new BD(this);
         // enable logging
@@ -199,7 +201,7 @@ public class ActividadPrincipal extends ActionBarActivity {
     public void onClickButton(View v) {
         Intent intent1,intent2;
         switch (v.getId()){
-            case R.id.button:
+            case R.id.bt_listaAsignaturas:
                /* AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
                 builder1.setMessage("Write your message here.");
                 builder1.setCancelable(true);
@@ -222,25 +224,25 @@ public class ActividadPrincipal extends ActionBarActivity {
                intent1 = new Intent(ActividadPrincipal.this, lista.class);
                 startActivity(intent1);
                 break;
-            case R.id.button2:
+            case R.id.bt_listaExámenes:
                 intent1 = new Intent(ActividadPrincipal.this, Examenes.class);
                 startActivity(intent1);
                 break;
-            case R.id.button5:
+            case R.id.bt_asignatura:
                 //Mint.logEvent("Button1 pressed");
                 intent2 = new Intent(ActividadPrincipal.this, crear_asignatura.class);
                 startActivity(intent2);
                 break;
-            case R.id.CrearExamen:
+            case R.id.bt_examen:
                 intent2 = new Intent(ActividadPrincipal.this, crear_examen.class);
                // intent2.putExtra("client", (android.os.Parcelable) client);
                 startActivity(intent2);
                 break;
-            case R.id.bt_login:
+            case R.id.bt_ayuda:
                 intent2 = new Intent(ActividadPrincipal.this, Contacto.class);
                 startActivity(intent2);
                 break;
-            case R.id.calendario:
+            case R.id.bt_calendarios:
                 intent2 = new Intent(ActividadPrincipal.this, mycalendar.CalendarSampleActivity.class);
                 startActivity(intent2);
                 break;

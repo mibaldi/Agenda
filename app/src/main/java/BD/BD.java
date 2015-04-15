@@ -15,12 +15,20 @@ import java.util.ArrayList;
  */
 public class BD  extends SQLiteOpenHelper{
     private static final String DB_NAME= "agenda";
-    private static final int SCHEME_VERSION = 1;
+    private static final int SCHEME_VERSION = 2;
     private SQLiteDatabase db;
     public BD(Context context) {
         super(context, DB_NAME, null, SCHEME_VERSION);
         Log.e("HolaMundo", "se ha creado la bd");
         db=this.getWritableDatabase();
+    }
+    private ContentValues generarValoresNota(ENota nota){
+        ContentValues valores= new ContentValues();
+        valores.put(ENota.FIELD_ASIGNATURA,nota.getAsignatura());
+        valores.put(ENota.FIELD_EXAMEN,nota.getExamen());
+        valores.put(ENota.FIELD_NOTA,nota.getNota());
+        valores.put(ENota.FIELD_NOTASOBRE,nota.getNota_sobre());
+        return valores;
     }
     private ContentValues generarValores(EAsignatura asignatura){
         ContentValues valores= new ContentValues();
@@ -44,8 +52,15 @@ public class BD  extends SQLiteOpenHelper{
         long res=db.insert(EAsignatura.TABLE_NAME,null,generarValores(asignatura));
         return res;
     }
-    public void insertarExamen(EExamen examen){
-        db.insert(EExamen.TABLE_NAME,null,generarValores2(examen));
+    public long insertarExamen(EExamen examen){
+
+           return db.insert(EExamen.TABLE_NAME,null,generarValores2(examen));
+
+
+
+    }
+    public void insertarNota(ENota nota){
+        db.insert(ENota.TABLE_NAME,null,generarValoresNota(nota));
     }
     public ArrayList<EAsignatura> getAsignaturas(){
         ArrayList<EAsignatura> ArrayAsignaturas =new ArrayList<>();
@@ -153,12 +168,16 @@ public class BD  extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(EAsignatura.CREATE_DB_TABLE);
         db.execSQL(EExamen.CREATE_DB_TABLE);
+        db.execSQL(ENota.CREATE_DB_TABLE);
         db.execSQL("PRAGMA foreign_keys = ON;");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        String SQLUpdateV2 = "ALTER TABLE "+ EAsignatura.TABLE_NAME+" ADD COLUMN "+ EAsignatura.FIELD_NOTA +" INT";
+        if(oldVersion == 1 && newVersion == 2){
+            db.execSQL(SQLUpdateV2);
+        }
     }
 }

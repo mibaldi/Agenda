@@ -42,6 +42,7 @@ public class crear_asignatura extends ActionBarActivity {
 
         }
         setContentView(R.layout.activity_crear_asignatura);
+
         ll2 = (LinearLayout)findViewById(R.id.ll2);
         texto=(EditText)findViewById(R.id.texto);
 

@@ -15,14 +15,15 @@ public class EExamen {
     public static final String FIELD_EVENTOID = "eventoid";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + " ( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
-                                                  FIELD_NOMBRE + " text unique,"+
-                                                  FIELD_ASIGNATURA +" text,"+
+                                                  FIELD_NOMBRE + " text not null,"+
+                                                  FIELD_ASIGNATURA +" text not null,"+
                                                   FIELD_FECHA +" text,"+
                                                   FIELD_HORA +" text,"+
                                                   FIELD_TIPOGUARDADO  +" text,"+
                                                   FIELD_CALENDARIOID +" text,"+
                                                   FIELD_EVENTOID  +" text,"+
-                                                  "FOREIGN KEY ( "+FIELD_ASIGNATURA+" ) REFERENCES "+EAsignatura.TABLE_NAME+" ( "+EAsignatura.FIELD_NOMBRE+" )"
+                                                    "unique ("+FIELD_NOMBRE+", "+FIELD_ASIGNATURA+")"
+                                                 // "FOREIGN KEY ( "+FIELD_ASIGNATURA+" ) REFERENCES "+EAsignatura.TABLE_NAME+" ( "+EAsignatura.FIELD_NOMBRE+" )"
                                                   + " );";
     private int id;
     private String nombre;

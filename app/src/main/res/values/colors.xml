@@ -18,4 +18,7 @@
     <color name="title_background">#ff355689</color>
     <color name="title_text">#ffffffff</color>
     <color name="title_separator">#40ffffff</color>
+    <color name="primaryColor">#3F51B5</color>
+    <color name="primaryColorDark">#303F9F</color>
+    <color name="accentColor">#F44336</color>
 </resources>

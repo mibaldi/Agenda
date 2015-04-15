@@ -1,20 +1,14 @@
 package com.mikel.agenda;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,7 +23,7 @@ import BD.EExamen;
 
 
 
-public class Examenes extends ActionBarActivity implements ListView.OnItemClickListener, DrawerListener {
+public class Examenes extends ActionBarActivity {
     BD helper;
     private ActionBar actionBar;
     private DrawerLayout cajon;
@@ -47,30 +41,30 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examenes);
 
-        actionBar = getSupportActionBar();
+       /* *//*actionBar = getSupportActionBar();
 
-        /**INDICAR TITULO Y SUBTITULO**/
+        *//**INDICAR TITULO Y SUBTITULO**//*
         actionBar.setTitle("Lista de Examenes");
         actionBar.setSubtitle("Examenes:");
 
-        /**CONFIGURAR CAJON**/
+        *//**CONFIGURAR CAJON**//*
         String[] valores = getResources().getStringArray(R.array.cajon);
         cajon = (DrawerLayout) findViewById(R.id.drawer_layout);
         opciones = (ListView) findViewById(R.id.left_drawer);
         opciones.setAdapter(new ArrayAdapter<String>(this, R.layout.plantilla_cajon, valores));
         opciones.setOnItemClickListener(this);
 
-        /**APLICAR SOMBRA AL CAJON**/
+        *//**APLICAR SOMBRA AL CAJON**//*
         cajon.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        /**HABILITAR ICONO DE LA APLICACION PARA EL MENU DE NAVEGACION**/
+        *//**HABILITAR ICONO DE LA APLICACION PARA EL MENU DE NAVEGACION**//*
         toggle = new ActionBarDrawerToggle(this, cajon, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
         cajon.setDrawerListener(this);
-
+*/
 
         //ListView lista2= (ListView) findViewById(R.id.Lista2);
         helper= new BD(this);
@@ -175,7 +169,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
     }
 
 
-    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+ /*   public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
        Intent intent1;
         switch (arg2) {
             case 0:
@@ -203,7 +197,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
                 break;
         }
         cajon.closeDrawer(opciones);
-    }
+    }*/
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getBaseContext(), ActividadPrincipal.class)
@@ -211,7 +205,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
         finish();
     }
 
-    /**METODOS PARA MANEJAR LA APERTURA Y CIERRE DEL NAVIGATION DRAWER DESDE EL ICONO DE LA APLICACION**/
+  /*  *//**METODOS PARA MANEJAR LA APERTURA Y CIERRE DEL NAVIGATION DRAWER DESDE EL ICONO DE LA APLICACION**//*
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -231,7 +225,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
     }
 
 
-    /**METODOS PARA MANEJAR LOS EVENTOS DE APERTURA Y CIERRE DEL NAVIGATION DRAWER**/
+    *//**METODOS PARA MANEJAR LOS EVENTOS DE APERTURA Y CIERRE DEL NAVIGATION DRAWER**//*
     @Override
     public void onDrawerClosed(View arg0) {
         //actionBar.setTitle("EJ ActionBar");
@@ -249,7 +243,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
     public void onDrawerStateChanged(int arg0) {
         // TODO Auto-generated method stub
 
-    }
+    }*/
     /*
      * Preparing the list data
      */
