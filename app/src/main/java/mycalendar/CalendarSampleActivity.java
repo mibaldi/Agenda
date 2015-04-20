@@ -115,21 +115,9 @@ adb shell setprop log.tag.HttpTransport DEBUG
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    // enable logging
-   ///Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
-    // view and menu
     setContentView(R.layout.calendarlist);
     listView = (ListView) findViewById(R.id.list);
     registerForContextMenu(listView);
-    // Google Accounts
-    /*credential =
-        GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
-    SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-    credential.setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
-    // Calendar client
-    client = new com.google.api.services.calendar.Calendar.Builder(
-        transport, jsonFactory, credential).setApplicationName("Baldugenda")
-        .build();*/
       credential=ActividadPrincipal.credential;
       client= ActividadPrincipal.client;
   }

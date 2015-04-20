@@ -24,10 +24,11 @@ public class ENota{
     private int nota;
     private int nota_sobre;
 
-    public ENota(String examen, String asignatura, int nota) {
+    public ENota(String examen, String asignatura, int nota,int nota_sobre) {
         this.examen = examen;
         this.asignatura = asignatura;
         this.nota = nota;
+        this.nota_sobre=nota_sobre;
     }
 
     public ENota() {

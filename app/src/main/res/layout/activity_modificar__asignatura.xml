@@ -1,14 +1,18 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent" android:layout_width="match_parent">
-<LinearLayout
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+
     tools:context="com.mikel.agenda.Asignatura"
     android:orientation="vertical"
-    android:id="@+id/LlAsignatura">
-
+    android:id="@+id/sv">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/ll">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,28 +34,47 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Evaluación:"
-        android:id="@+id/textView"
+        android:id="@+id/textView9"
+        android:text="Enlaces:"
+        android:textSize="25dp"
+        android:textStyle="bold|italic" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sv2" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/ll2"></LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nota:"
+        android:id="@+id/textView19"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="25dp"
         android:textStyle="bold|italic" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/eval"
-        android:text="hola"
-        android:textSize="25dp" />
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/nota"
+        android:text="0" />
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView9"
-        android:text="Enlaces:"
-        android:textSize="25dp"
-        android:textStyle="bold|italic" />
+        android:text="guardar"
+        android:id="@+id/save"
+        android:onClick="guardar" />
 
 </LinearLayout>
 </ScrollView>

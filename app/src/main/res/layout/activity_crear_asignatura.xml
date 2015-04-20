@@ -71,7 +71,23 @@
                 android:text="@string/radio_conjunta"
                 android:id="@+id/radioConjunta"
                 android:checked="false" />
+
         </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Sobre cuanto se evalua?"
+            android:id="@+id/textView16" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/NotaSobre"
+            android:text="100"
+            android:editable="true" />
 
         <Button
             android:layout_width="wrap_content"

@@ -43,13 +43,13 @@
 
     <string name="batchadd">Copy Calendar x3 (Batch)</string>
 
-    <string name="edit">Edit Calendar</string>
+    <string name="edit">Editar</string>
 
-    <string name="delete">Delete Calendar</string>
+    <string name="delete">Borrar</string>
 
-    <string name="delete_title">Delete Calendar?</string>
+    <string name="delete_title">¿Seguro que quieres borrar?</string>
 
-    <string name="yes">Yes</string>
+    <string name="yes">Si</string>
 
     <string name="no">No</string>
 
@@ -57,5 +57,6 @@
 
     <string name="error_format">[Error] %s</string>
     <string name="title_activity_contacto">Contacto</string>
+    <string name="title_activity_modificar__asignatura">Modificar_Asignatura</string>
 
 </resources>

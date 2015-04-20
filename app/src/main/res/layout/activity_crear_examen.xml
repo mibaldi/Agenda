@@ -84,6 +84,33 @@
         android:text="Hora Inicio"
         android:id="@+id/button3" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nota Sacada:"
+        android:id="@+id/textView17" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/nota"
+        android:text="0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sobre cuanto es el examen:"
+        android:id="@+id/textView18" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/notaMax" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

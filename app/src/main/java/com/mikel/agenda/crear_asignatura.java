@@ -23,44 +23,45 @@ import BD.EAsignatura;
 
 
 public class crear_asignatura extends ActionBarActivity {
-    EditText texto;
+    EditText texto, NotaSobre;
     RadioGroup radioEvalucionGroup;
     RadioButton radioEleccion;
     LinearLayout ll2;
-    ArrayList<String> alist=new ArrayList<String>();
+    ArrayList<String> alist = new ArrayList<String>();
     int et;
 
     List<EditText> allEds = new ArrayList<EditText>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        if ( savedInstanceState !=  null )
-        {
-            alist=savedInstanceState.getStringArrayList("allEds");
-            et=savedInstanceState.getInt("et");
+        if (savedInstanceState != null) {
+            alist = savedInstanceState.getStringArrayList("allEds");
+            et = savedInstanceState.getInt("et");
 
         }
         setContentView(R.layout.activity_crear_asignatura);
 
-        ll2 = (LinearLayout)findViewById(R.id.ll2);
-        texto=(EditText)findViewById(R.id.texto);
+        ll2 = (LinearLayout) findViewById(R.id.ll2);
+        texto = (EditText) findViewById(R.id.texto);
 
-        radioEvalucionGroup = (RadioGroup)findViewById(R.id.radioEvaluacionGroup);
-        for (int i=0;i<alist.size();i++){
-            EditText temp= new EditText(crear_asignatura.this);
+        radioEvalucionGroup = (RadioGroup) findViewById(R.id.radioEvaluacionGroup);
+        for (int i = 0; i < alist.size(); i++) {
+            EditText temp = new EditText(crear_asignatura.this);
             temp.setText(alist.get(i));
             temp.setWidth(ll2.getWidth());
-            if (i==et) temp.requestFocus();
+            if (i == et) temp.requestFocus();
             allEds.add(temp);
             ll2.addView(temp);
         }
         Button ib = (Button) findViewById(R.id.ib);
+        final EditText NotaSobre = (EditText) findViewById(R.id.NotaSobre);
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                EditText temp= new EditText(crear_asignatura.this);
+                EditText temp = new EditText(crear_asignatura.this);
 
                 temp.setWidth(ll2.getWidth());
                 allEds.add(temp);
@@ -74,31 +75,37 @@ public class crear_asignatura extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Mint.logEvent("Button1 pressed");
-                BD  helper = new BD(crear_asignatura.this);
+                BD helper = new BD(crear_asignatura.this);
                 EAsignatura asig = new EAsignatura();
                 if (texto.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Campo de nombre obligatorio", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     asig.setNombre(texto.getText().toString());
-                    ArrayList<String> a= new ArrayList<String>();
+                    ArrayList<String> a = new ArrayList<String>();
 
-                    for (int i=0;i<allEds.size();i++){
-                        if (!TextUtils.isEmpty(allEds.get(i).getText())) a.add(allEds.get(i).getText().toString());
+                    for (int i = 0; i < allEds.size(); i++) {
+                        if (!TextUtils.isEmpty(allEds.get(i).getText()))
+                            a.add(allEds.get(i).getText().toString());
 
                     }
 
-                    String enlaces=Joiner.on(';').join(a);
-                    Log.d("Edit",enlaces);
+                    String enlaces = Joiner.on(';').join(a);
+                    Log.d("Edit", enlaces);
                     asig.setEnlaces(enlaces);
-                    int selectId=radioEvalucionGroup.getCheckedRadioButtonId();
-                    radioEleccion=(RadioButton)findViewById(selectId);
+                    int selectId = radioEvalucionGroup.getCheckedRadioButtonId();
+                    radioEleccion = (RadioButton) findViewById(selectId);
                     asig.setEvaluacion(radioEleccion.getText().toString());
-                    long res=helper.insertarAsignatura(asig);
+                    int nota = 100;
+                    if (!NotaSobre.getText().toString().matches("")) {
+                        nota = Integer.parseInt(NotaSobre.getText().toString());
+                    }
+                    asig.setNota(nota);
+                    long res = helper.insertarAsignatura(asig);
 
-                    if (res!=-1){
-                        Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_SHORT).show();}
-                    else Toast.makeText(getApplicationContext(), "No se ha guardado la asignatura", Toast.LENGTH_SHORT).show();
+                    if (res != -1) {
+                        Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getApplicationContext(), "No se ha guardado la asignatura", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -108,17 +115,17 @@ public class crear_asignatura extends ActionBarActivity {
 
 
     @Override
-    protected  void onSaveInstanceState ( Bundle outState )  {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        ArrayList<String> alist=new ArrayList<String>();
-        int et=0;
-        for (int i=0;i<allEds.size();i++){
+        ArrayList<String> alist = new ArrayList<String>();
+        int et = 0;
+        for (int i = 0; i < allEds.size(); i++) {
             alist.add(allEds.get(i).getText().toString());
-            if (allEds.get(i).hasFocus()) et=i;
+            if (allEds.get(i).hasFocus()) et = i;
         }
 
-       outState.putStringArrayList("allEds",alist);
-        outState.putInt("et",et);
+        outState.putStringArrayList("allEds", alist);
+        outState.putInt("et", et);
     }
 
     /*@Override

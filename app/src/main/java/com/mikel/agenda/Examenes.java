@@ -1,14 +1,19 @@
 package com.mikel.agenda;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,7 +28,7 @@ import BD.EExamen;
 
 
 
-public class Examenes extends ActionBarActivity {
+public class Examenes extends ActionBarActivity implements ListView.OnItemClickListener, DrawerLayout.DrawerListener {
     BD helper;
     private ActionBar actionBar;
     private DrawerLayout cajon;
@@ -41,32 +46,32 @@ public class Examenes extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examenes);
 
-       /* *//*actionBar = getSupportActionBar();
+       actionBar = getSupportActionBar();
 
-        *//**INDICAR TITULO Y SUBTITULO**//*
+        /**INDICAR TITULO Y SUBTITULO**/
         actionBar.setTitle("Lista de Examenes");
         actionBar.setSubtitle("Examenes:");
 
-        *//**CONFIGURAR CAJON**//*
+        /**CONFIGURAR CAJON**/
         String[] valores = getResources().getStringArray(R.array.cajon);
         cajon = (DrawerLayout) findViewById(R.id.drawer_layout);
         opciones = (ListView) findViewById(R.id.left_drawer);
         opciones.setAdapter(new ArrayAdapter<String>(this, R.layout.plantilla_cajon, valores));
         opciones.setOnItemClickListener(this);
 
-        *//**APLICAR SOMBRA AL CAJON**//*
+        /**APLICAR SOMBRA AL CAJON**/
         cajon.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-        *//**HABILITAR ICONO DE LA APLICACION PARA EL MENU DE NAVEGACION**//*
+        /**HABILITAR ICONO DE LA APLICACION PARA EL MENU DE NAVEGACION**/
         toggle = new ActionBarDrawerToggle(this, cajon, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
         cajon.setDrawerListener(this);
-*/
 
-        //ListView lista2= (ListView) findViewById(R.id.Lista2);
+
+        ListView lista2= (ListView) findViewById(R.id.Lista2);
         helper= new BD(this);
 
         // get the listview
@@ -143,33 +148,13 @@ public class Examenes extends ActionBarActivity {
                 return false;
             }
         });
-        /*String[]from={EExamen.FIELD_NOMBRE, EExamen.FIELD_ASIGNATURA};
-        int[]to=new int[]{android.R.id.text1,android.R.id.text2};
 
-        adapter= new SimpleCursorAdapter(this,android.R.layout.two_line_list_item,cursor,from,to);
-        lista2.setAdapter(adapter);
-        lista2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                /// Obtiene el valor de la casilla elegida
-                String rowName = cursor.getString(cursor.getColumnIndexOrThrow(EExamen.FIELD_NOMBRE));
-                int rowId = cursor.getInt(cursor.getColumnIndexOrThrow(EExamen.FIELD_ID));
-                Intent intent = new Intent(Examenes.this, Examen.class);
-                intent.putExtra("ID",String.valueOf(rowId));
-
-                startActivity(intent);
-                // muestra un mensaje
-                // Toast.makeText(getApplicationContext(), "Haz hecho click en " + rowId, Toast.LENGTH_SHORT).show();
-
-            }
-        });*/
 
 
     }
 
 
- /*   public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
        Intent intent1;
         switch (arg2) {
             case 0:
@@ -197,7 +182,7 @@ public class Examenes extends ActionBarActivity {
                 break;
         }
         cajon.closeDrawer(opciones);
-    }*/
+    }
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getBaseContext(), ActividadPrincipal.class)
@@ -205,7 +190,7 @@ public class Examenes extends ActionBarActivity {
         finish();
     }
 
-  /*  *//**METODOS PARA MANEJAR LA APERTURA Y CIERRE DEL NAVIGATION DRAWER DESDE EL ICONO DE LA APLICACION**//*
+  /**METODOS PARA MANEJAR LA APERTURA Y CIERRE DEL NAVIGATION DRAWER DESDE EL ICONO DE LA APLICACION**/
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -225,7 +210,7 @@ public class Examenes extends ActionBarActivity {
     }
 
 
-    *//**METODOS PARA MANEJAR LOS EVENTOS DE APERTURA Y CIERRE DEL NAVIGATION DRAWER**//*
+    /**METODOS PARA MANEJAR LOS EVENTOS DE APERTURA Y CIERRE DEL NAVIGATION DRAWER**/
     @Override
     public void onDrawerClosed(View arg0) {
         //actionBar.setTitle("EJ ActionBar");
@@ -243,14 +228,11 @@ public class Examenes extends ActionBarActivity {
     public void onDrawerStateChanged(int arg0) {
         // TODO Auto-generated method stub
 
-    }*/
+    }
     /*
      * Preparing the list data
      */
     private void prepareListData() {
-
-
-
         asignaturas=helper.getAsignaturasExamenesCursor();
 
         List<List>listas=new ArrayList<List>();
@@ -268,48 +250,11 @@ public class Examenes extends ActionBarActivity {
                     String nameExam=examenes.getString(examenes.getColumnIndex(EExamen.FIELD_NOMBRE));
                     temp.add(nameExam);
                 }
-
-
             listas.add(temp);
         }
-       /* // Adding child data
-        listDataHeader.add("Top 250");
-        listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
-
-
-        // Adding child data
-        List<String> top250 = new ArrayList<String>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-
-        List<String> nowShowing = new ArrayList<String>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
-
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");*/
-        //Toast.makeText(getApplicationContext(), "listDataHeader.size="+listDataHeader.size()+"listas.size="+listas.size(), Toast.LENGTH_LONG).show();
         for (int i=0; i<listDataHeader.size();i++){
             listDataChild.put(listDataHeader.get(i),listas.get(i));
         }
-
-        /*listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);*/
     }
 
 

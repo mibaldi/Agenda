@@ -17,6 +17,8 @@ public class Asignatura extends ActionBarActivity {
     private TextView nombreAsig,eval;
     private String ID;
     private EAsignatura asigEscogida;
+    private static final int CONTEXT_EDIT = 0;
+    private static final int CONTEXT_DELETE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

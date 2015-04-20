@@ -9,8 +9,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,7 +42,10 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.Level;
 
-import BD.*;
+import BD.BD;
+import BD.EAsignatura;
+import BD.EExamen;
+import BD.ENota;
 import mycalendar.CalendarInfo;
 import mycalendar.CalendarModel;
 import mycalendar.Utils;
@@ -49,14 +56,14 @@ import mycalendar.Utils;
 
 
 
-public class crear_examen extends ActionBarActivity{
+public class crear_examen extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
 
     java.util.Calendar calendar= java.util.Calendar.getInstance();
     int a,m,d,mes;
     Button btn,guardar;
     TextView fecha;
-    Spinner spnClients,spnCal;
-    EditText etNombre,etvalor;
+    Spinner spnAsig,spnCal;
+    EditText etNombre,etNotaMax,etNota;
     private BD objAsignaturas;
     private Cursor cursor;
     private ListView list;
@@ -76,13 +83,14 @@ public class crear_examen extends ActionBarActivity{
     GoogleAccountCredential credential;
     com.google.api.services.calendar.Calendar client;
     CalendarModel model;
-    int numAsyncTasks;
+    int numAsyncTasks,notaMax;
     ArrayAdapter<CalendarInfo> adapter2;
     Boolean resp=false;
     String calendarId,eventoId="";
     EExamen examen;
     ENota nota;
     BD helper;
+    Boolean nota_correcta=true;
 
     private TextView mTimeDisplay;
     private Button mPickTime;
@@ -98,14 +106,72 @@ public class crear_examen extends ActionBarActivity{
         setContentView(R.layout.activity_crear_examen);
         objAsignaturas = new BD(this);
         cursor=objAsignaturas.getAsignaturasCursor();
+        etNotaMax=(EditText)findViewById(R.id.notaMax);
+        etNotaMax.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    int val = Integer.parseInt(s.toString());
+                    if(val > notaMax) {
+                        s.replace(0, s.length(), String.valueOf(notaMax));
+                    } else if(val < 0) {
+                        s.replace(0,s.length(),"0");
+
+                    }
+                } catch (NumberFormatException ex) {
+                    // Do something
+                }
+            }
+        });
+        etNota=(EditText)findViewById(R.id.nota);
+        etNota.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    int val = Integer.parseInt(s.toString());
+                    int n=Integer.parseInt(etNotaMax.getText().toString());
+                    if(val > n) {
+                        s.replace(0, s.length(), String.valueOf(n));
+                    } else if(val < 0) {
+                        s.replace(0,s.length(),"0");
+
+                    }
+                } catch (NumberFormatException ex) {
+                    // Do something
+                }
+            }
+        });
 
         String[] from = {EAsignatura.FIELD_NOMBRE};
         int[] to = new int[]{android.R.id.text1};
         adapter= new SimpleCursorAdapter(this,android.R.layout.simple_list_item_1,cursor,from,to);
 
-        spnClients = (Spinner) findViewById(R.id.spinner_id);
+        spnAsig = (Spinner) findViewById(R.id.spinner_id);
         spnCal = (Spinner) findViewById(R.id.spinner_cal);
-        spnClients.setAdapter(adapter);
+        spnAsig.setAdapter(adapter);
+        this.spnAsig.setOnItemSelectedListener(this);
 
         fecha=(TextView)findViewById(R.id.textView7);
         btn=(Button)findViewById(R.id.btnFecha);
@@ -195,6 +261,7 @@ public class crear_examen extends ActionBarActivity{
              return super.onOptionsItemSelected(item);
          }
      */
+
     public void EscogerFecha(View view){
         DatePickerDialog.OnDateSetListener mdpd=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -219,15 +286,16 @@ public class crear_examen extends ActionBarActivity{
     public void Guardar(View view) {
         String text = "";
         nombre = etNombre.getText().toString();
-        if (spnClients.getCount() == 0) {
+        if (spnAsig.getCount() == 0) {
             Toast.makeText(getApplicationContext(), "Campo Asignatura obligatorio ", Toast.LENGTH_SHORT).show();
         }
         else if(nombre.matches("")){
             Toast.makeText(getApplicationContext(), "Campo Nombre obligatorio ", Toast.LENGTH_SHORT).show();
         }
         else {
-            Cursor c = (Cursor) spnClients.getSelectedItem();
+            Cursor c = (Cursor) spnAsig.getSelectedItem();
             text = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
+
              helper= new BD(crear_examen.this);
              examen= new EExamen();
             examen.setNombre(nombre);
@@ -243,20 +311,28 @@ public class crear_examen extends ActionBarActivity{
             nota=new ENota();
             nota.setAsignatura(text);
             nota.setExamen(nombre);
-            nota.setNota(9);
-            nota.setNota_sobre(10);
+            nota.setNota(Integer.parseInt(etNota.getText().toString()));
+            nota.setNota_sobre(Integer.parseInt(etNotaMax.getText().toString()));
+            if (nota.getNota()>nota.getNota_sobre()){
+                nota_correcta=false;
+                if(etNota.requestFocus()) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }else{
+                nota_correcta=true;
+            }
             ///////
-
-            if (resp) {
+            if (!nota_correcta){
+                Toast.makeText(getApplicationContext(), "La nota no puede ser mayor que el maximo", Toast.LENGTH_SHORT).show();
+            }
+            else if (resp) {
                 examen.setTipoGuardado("Ambos");
                 new CallAPI().execute();
-
-
             } else {
                 examen.setTipoGuardado("Local");
                respuesta= helper.insertarExamen(examen);
-                if (respuesta==-1){
-                    Toast.makeText(getApplicationContext(), "No se ha podido insertar en local", Toast.LENGTH_SHORT).show();
+                if (respuesta==-1 ){
+                        Toast.makeText(getApplicationContext(), "No se ha podido insertar en local", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "Examen guardado en local", Toast.LENGTH_SHORT).show();
                 }
@@ -266,7 +342,26 @@ public class crear_examen extends ActionBarActivity{
     }
 
 
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (cursor!=null){
+            cursor.moveToPosition(position);
+            String asig=cursor.getString(cursor.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
+            notaMax=objAsignaturas.getNotaRestante(asig);
+            etNotaMax.setText(String.valueOf(notaMax));
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
     private class CallAPI extends AsyncTask<String, String, String> {
+
 
         @Override
         protected String doInBackground(String... params) {
@@ -302,13 +397,11 @@ public class crear_examen extends ActionBarActivity{
                 examen.setCalendarioid(calendarId);
                 examen.setEventoid(eventoId);
                 respuesta=helper.insertarExamen(examen);
-                if(respuesta==-1){
+                if(respuesta==-1 || !nota_correcta){
                     client.events().delete(calendarId,eventoId).execute();
                 }else{
                     helper.insertarNota(nota);
                 }
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -318,7 +411,7 @@ public class crear_examen extends ActionBarActivity{
         @Override
         protected void onPostExecute(String s) {
             if (respuesta==-1){
-                Toast.makeText(getApplicationContext(), "No se ha podido insertar", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No se ha podido insertar", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(getApplicationContext(), "Examen guardado en Local y en Google Calendar", Toast.LENGTH_SHORT).show();
             }

@@ -38,6 +38,11 @@ android {
     }
     productFlavors {
     }
+    defaultConfig {
+
+        resConfig "en"
+        resConfigs "nodpi", "hdpi"
+    }
 }
 
 dependencies {
@@ -51,5 +56,5 @@ dependencies {
     compile('com.google.http-client:google-http-client-gson:1.17.0-rc') {
         exclude module: 'httpclient'
     }
-    compile files('libs/mint-4.1.jar')
+   // compile files('libs/mint-4.1.jar')
 }
