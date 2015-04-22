@@ -62,6 +62,7 @@ public class ActividadPrincipal extends ActionBarActivity {
 
 
         BD helper= new BD(this);
+
         // enable logging
         Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
         // Google Accounts
@@ -74,7 +75,9 @@ public class ActividadPrincipal extends ActionBarActivity {
                 transport, jsonFactory, credential).setApplicationName("Baldugenda")
                 .build();
         model = new CalendarModel();
-
+        if(!helper.isActualizado()){
+            helper.actualizar_schema2();
+        }
     }
     @Override
     protected void onResume() {

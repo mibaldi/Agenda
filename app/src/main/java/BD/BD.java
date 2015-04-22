@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.mikel.agenda.ActividadPrincipal;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -17,7 +21,9 @@ import java.util.ArrayList;
 public class BD  extends SQLiteOpenHelper{
     private static final String DB_NAME= "agenda";
     private static final int SCHEME_VERSION = 2;
+    private static boolean actualizado;
     private SQLiteDatabase db;
+
     String columnasExamen[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID,EExamen.FIELD_CALENDARIONOMBRE};
     public BD(Context context) {
         super(context, DB_NAME, null, SCHEME_VERSION);
@@ -293,19 +299,104 @@ public class BD  extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(EAsignatura.CREATE_DB_TABLE);
         db.execSQL(EExamen.CREATE_DB_TABLE);
-        db.execSQL(ENota.CREATE_DB_TABLE);
+       // db.execSQL(ENota.CREATE_DB_TABLE);
+        upgrade_2(db);
         db.execSQL("PRAGMA foreign_keys = ON;");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String SQLUpdateV2 = "ALTER TABLE "+ EAsignatura.TABLE_NAME+" ADD COLUMN "+ EAsignatura.FIELD_NOTA +" float";
-        String SQLUpdateV2Examen = "ALTER TABLE "+ EExamen.TABLE_NAME+" ADD COLUMN "+ EExamen.FIELD_CALENDARIONOMBRE +" text";
+
         if(oldVersion == 1 && newVersion == 2){
+            upgrade_2(db);
+            //upgrade_2_modificar();
+        }
+    }
+    /*22-04-15*/
+    private void upgrade_2(SQLiteDatabase db)
+    {
+        //
+        // Upgrade versión 2: definir algunos datos de ejemplo
+        //
+        actualizado=false;
+        try {
+            db.beginTransaction();
+            String SQLUpdateV2 = "ALTER TABLE "+ EAsignatura.TABLE_NAME+" ADD COLUMN "+ EAsignatura.FIELD_NOTA +" float";
+            String SQLUpdateV2Examen = "ALTER TABLE "+ EExamen.TABLE_NAME+" ADD COLUMN "+ EExamen.FIELD_CALENDARIONOMBRE +" text";
             db.execSQL(SQLUpdateV2);
             db.execSQL(SQLUpdateV2Examen);
             db.execSQL(ENota.CREATE_DB_TABLE);
+            db.setTransactionSuccessful();
+        } catch(SQLException e) {
+
+        } finally {
+            db.endTransaction();
+
+        }
+    }
+    /*22-04-15*/
+    public static boolean isActualizado() {
+        return actualizado;
+    }
+    /*22-04-15*/
+    public void actualizar_schema2(){
+
+        Cursor cAsig=getAsignaturasCursor();
+        if (cAsig.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                int idAsig=cAsig.getInt(cAsig.getColumnIndexOrThrow(EAsignatura.FIELD_ID));
+                ContentValues nuevoRegistroAsig = new ContentValues();
+                nuevoRegistroAsig.put(EAsignatura.FIELD_NOTA,100);
+                db.update(EAsignatura.TABLE_NAME,nuevoRegistroAsig,EAsignatura.FIELD_ID+" ="+idAsig,null);
+            } while(cAsig.moveToNext());
+        }
+        Cursor c= getExamenesCursor();
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                ENota nota= new ENota();
+                String examen=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_NOMBRE));
+                String asig=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_ASIGNATURA));
+                String tipo=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_TIPOGUARDADO));
+                String calendarId=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_CALENDARIOID));
+                int id=c.getInt(c.getColumnIndexOrThrow(EExamen.FIELD_ID));
+                nota.setExamen(examen);
+                nota.setAsignatura(asig);
+                nota.setNota(0);
+                nota.setNota_sobre(0);
+                db.insert(ENota.TABLE_NAME,null,generarValoresNota(nota));
+                if(tipo.equals("Ambos")){
+                    new CallAPI().execute(calendarId,String.valueOf(id) );
+                }
+            } while(c.moveToNext());
+        }
+
+        Log.i(this.getClass().toString(), "Actualización versión 2 finalizada");
+        actualizado=true;
+    }
+    /*22-04-15*/
+    private class CallAPI  extends AsyncTask<String, String, Void> {
+
+
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                String calId=params[0];
+                int id=Integer.parseInt(params[1]);
+                com.google.api.services.calendar.Calendar client;
+                client=ActividadPrincipal.client;
+                com.google.api.services.calendar.model.Calendar cal =client.calendars().get(calId).execute();
+                String calNombre= cal.getSummary();
+                ContentValues nuevoRegistro = new ContentValues();
+                nuevoRegistro.put(EExamen.FIELD_CALENDARIONOMBRE,calNombre);
+                db.update(EExamen.TABLE_NAME,nuevoRegistro,EExamen.FIELD_ID +" ="+id,null);
+            } catch (IOException e) {
+
+            }
+            return null;
         }
     }
 }

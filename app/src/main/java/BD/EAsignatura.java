@@ -15,7 +15,7 @@ public class EAsignatura {
             FIELD_NOMBRE + " text unique not null," +
             FIELD_ENLACES + " text," +
             FIELD_EVALUACION + " text," +
-            FIELD_NOTA + " float"
+            FIELD_NOTA + " float "
             + " );";
 
     private int id;
