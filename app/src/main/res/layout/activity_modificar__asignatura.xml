@@ -31,7 +31,21 @@
         android:text="hola"
         android:textSize="25dp" />
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView20"
+            android:text="Evaluación:"
+            android:textSize="25dp"
+            android:textStyle="bold|italic" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_evaluacion"
+            android:spinnerMode="dialog" />
+
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView9"
@@ -50,7 +64,13 @@
             android:id="@+id/ll2"></LinearLayout>
     </ScrollView>
 
-    <TextView
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Enlace"
+            android:id="@+id/ib" />
+
+        <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nota:"
@@ -64,7 +84,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/nota"
         android:text="0" />

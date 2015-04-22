@@ -12,6 +12,7 @@ public class EExamen {
     public static final String FIELD_HORA = "hora";
     public static final String FIELD_TIPOGUARDADO = "tipoGuardado";
     public static final String FIELD_CALENDARIOID = "calendarioid";
+    public static final String FIELD_CALENDARIONOMBRE = "calendarionombre";
     public static final String FIELD_EVENTOID = "eventoid";
     public static final String CREATE_DB_TABLE = "create table " + TABLE_NAME + " ( " +
                                                   FIELD_ID  + " integer primary key autoincrement,"+
@@ -21,6 +22,7 @@ public class EExamen {
                                                   FIELD_HORA +" text,"+
                                                   FIELD_TIPOGUARDADO  +" text,"+
                                                   FIELD_CALENDARIOID +" text,"+
+                                                  FIELD_CALENDARIONOMBRE + " text,"+
                                                   FIELD_EVENTOID  +" text,"+
                                                     "unique ("+FIELD_NOMBRE+", "+FIELD_ASIGNATURA+")"
                                                  // "FOREIGN KEY ( "+FIELD_ASIGNATURA+" ) REFERENCES "+EAsignatura.TABLE_NAME+" ( "+EAsignatura.FIELD_NOMBRE+" )"
@@ -32,6 +34,7 @@ public class EExamen {
     private String hora;
     private String tipoGuardado;
     private String calendarioid;
+    private String calendarionombre;
     private String eventoid;
 
 
@@ -104,5 +107,12 @@ public class EExamen {
 
     public void setEventoid(String eventoid) {
         this.eventoid = eventoid;
+    }
+    public String getCalendarionombre() {
+        return calendarionombre;
+    }
+
+    public void setCalendarionombre(String calendarionombre) {
+        this.calendarionombre = calendarionombre;
     }
 }

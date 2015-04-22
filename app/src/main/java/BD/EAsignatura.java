@@ -15,15 +15,14 @@ public class EAsignatura {
             FIELD_NOMBRE + " text unique not null," +
             FIELD_ENLACES + " text," +
             FIELD_EVALUACION + " text," +
-            FIELD_NOTA + " integer"
+            FIELD_NOTA + " float"
             + " );";
+
     private int id;
     private String nombre;
     private String enlaces;
     private String evaluacion;
-
-
-    private int nota;
+    private float nota;
 
     public EAsignatura(String nombre) {
         this.nombre = nombre;
@@ -64,11 +63,11 @@ public class EAsignatura {
         this.evaluacion = evaluacion;
     }
 
-    public int getNota() {
+    public float getNota() {
         return nota;
     }
 
-    public void setNota(int nota) {
+    public void setNota(float nota) {
         this.nota = nota;
     }
 }

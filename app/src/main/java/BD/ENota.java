@@ -14,15 +14,15 @@ public class ENota{
                                                   FIELD_ID  + " integer primary key autoincrement,"+
                                                    FIELD_EXAMEN + " text not null,"+
                                                   FIELD_ASIGNATURA +" text not null,"+
-                                                    FIELD_NOTA +" integer,"+
-                                                    FIELD_NOTASOBRE +" integer,"+
+                                                    FIELD_NOTA +" float,"+
+                                                    FIELD_NOTASOBRE +" float,"+
                                                     "unique ("+FIELD_EXAMEN+", "+FIELD_ASIGNATURA+")"
                                                   + " );";
     private int id;
     private String examen;
     private String asignatura;
-    private int nota;
-    private int nota_sobre;
+    private float nota;
+    private float nota_sobre;
 
     public ENota(String examen, String asignatura, int nota,int nota_sobre) {
         this.examen = examen;
@@ -58,19 +58,19 @@ public class ENota{
         this.asignatura = asignatura;
     }
 
-    public int getNota() {
+    public float getNota() {
         return nota;
     }
 
-    public void setNota(int nota) {
+    public void setNota(float nota) {
         this.nota = nota;
     }
 
-    public int getNota_sobre() {
+    public float getNota_sobre() {
         return nota_sobre;
     }
 
-    public void setNota_sobre(int nota_sobre) {
+    public void setNota_sobre(float nota_sobre) {
         this.nota_sobre = nota_sobre;
     }
 }

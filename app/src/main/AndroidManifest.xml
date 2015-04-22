@@ -102,6 +102,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.Asignatura" />
         </activity>
+        <activity
+            android:name=".Modificar_Examen"
+            android:label="@string/title_activity_modificar__examen"
+            android:parentActivityName=".Examen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.Examen" />
+        </activity>
     </application>
 
 </manifest>

@@ -58,5 +58,6 @@
     <string name="error_format">[Error] %s</string>
     <string name="title_activity_contacto">Contacto</string>
     <string name="title_activity_modificar__asignatura">Modificar_Asignatura</string>
+    <string name="title_activity_modificar__examen">Modificar_Examen</string>
 
 </resources>

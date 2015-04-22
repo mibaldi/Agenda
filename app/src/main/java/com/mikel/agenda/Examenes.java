@@ -1,5 +1,7 @@
 package com.mikel.agenda;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -10,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,6 +42,9 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
+    private static final int CONTEXT_EDIT = 0;
+    private static final int CONTEXT_DELETE = 1;
+
 
     HashMap<String, List<String>> listDataChild;
 
@@ -84,6 +90,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+        registerForContextMenu(expListView);
         // Listview Group click listener
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
@@ -119,6 +126,27 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
             }
         });
+        /*expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+                    String nombre=listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+                    Toast.makeText(getApplicationContext(),nombre,Toast.LENGTH_SHORT).show();
+                    // You now have everything that you would as if this was an OnChildClickListener()
+                    // Add your logic here.
+                    examenes=helper.buscarExamen(nombre);
+                    examenes.moveToFirst();
+                    //String rowName = examenes.getString(examenes.getColumnIndexOrThrow(EExamen.FIELD_NOMBRE));
+                    rowId2= examenes.getInt(examenes.getColumnIndexOrThrow(EExamen.FIELD_ID));
+                    // Return true as we are handling the event.
+                    return true;
+                }
+
+                return false;
+            }
+        });*/
 
         // Listview on child click listener
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -148,10 +176,94 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
                 return false;
             }
         });
+        /*expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+                    String nombre=listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+
+                    // You now have everything that you would as if this was an OnChildClickListener()
+                    // Add your logic here.
+
+                    // Return true as we are handling the event.
+                    return true;
+                }
+
+                return false;
+            }
+        });*/
 
 
 
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        ExpandableListView.ExpandableListContextMenuInfo info=(ExpandableListView.ExpandableListContextMenuInfo)menuInfo;
+        int type=ExpandableListView.getPackedPositionType(info.packedPosition);
+        if (type == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
+
+
+            // Show context menu for children
+        } else if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+            menu.add(0, CONTEXT_EDIT, 0, R.string.edit);
+            menu.add(0, CONTEXT_DELETE, 0, R.string.delete);
+        }
+
+
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo)item.getMenuInfo();
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        //int AsigPosition = (int) info.position;
+
+        int groupPosition = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+        int childPosition = ExpandableListView.getPackedPositionChild(info.packedPosition);
+        final String nombre=listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+        examenes=helper.buscarExamen(nombre);
+        examenes.moveToFirst();
+        final int rowId = examenes.getInt(examenes.getColumnIndexOrThrow(EExamen.FIELD_ID));
+        switch (item.getItemId()) {
+            case CONTEXT_EDIT:
+
+
+                Intent intent = new Intent(Examenes.this, Modificar_Examen.class);
+                intent.putExtra("ID",String.valueOf(rowId));
+                startActivity(intent);
+                return true;
+
+            case CONTEXT_DELETE:
+                new AlertDialog.Builder(this).setTitle(R.string.delete_title)
+                        .setMessage(nombre)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int which) {
+                                long res=helper.deleteExamen(String.valueOf(rowId),nombre);
+                                if(res==0){
+                                    Toast.makeText(getApplicationContext(), "No se pueden borrar asignaturas con examenes", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "Examen borrado", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    startActivity(getIntent());
+                                }
+                                finish();
+                                startActivity(getIntent());
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .create()
+                        .show();
+                return true;
+
+        }
+
+        return super.onContextItemSelected(item);
+                }
 
 
     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {

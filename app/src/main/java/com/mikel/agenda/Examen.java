@@ -16,7 +16,7 @@ import BD.EExamen;
 
 public class Examen extends ActionBarActivity {
     private BD helper;
-    private TextView nombre,nombreAsig,fecha,hora,tipoGuardado;
+    private TextView nombre,nombreAsig,fecha,hora,tipoGuardado,nota;
     private String ID;
     private EExamen ExamenEscogido;
     com.google.api.services.calendar.Calendar client;
@@ -35,42 +35,20 @@ public class Examen extends ActionBarActivity {
         fecha= (TextView)findViewById(R.id.fecha);
         hora= (TextView)findViewById(R.id.hora);
         tipoGuardado= (TextView)findViewById(R.id.tvTipoGuardado);
+        nota=(TextView)findViewById(R.id.nota);
         if (ExamenEscogido!=null){
             nombre.setText(ExamenEscogido.getNombre());
             nombreAsig.setText(ExamenEscogido.getAsignatura());
             fecha.setText(ExamenEscogido.getFecha());
             hora.setText(ExamenEscogido.getHora());
             tipoGuardado.setText(ExamenEscogido.getTipoGuardado());
-
-
+            String n=helper.getNotaExamen(ExamenEscogido.getNombre());
+            nota.setText(n);
         }else{
             nombreAsig.setText("sin Asignatura");
         }
 
     }
-
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_examen, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
     public void borrar(View view){
         new CallAPI().execute();
 
@@ -82,12 +60,12 @@ public class Examen extends ActionBarActivity {
 
             try {
                 client.events().delete(ExamenEscogido.getCalendarioid(),ExamenEscogido.getEventoid()).execute();
-                helper.deleteExamen(ID);
+                helper.deleteExamen(ID,ExamenEscogido.getNombre());
                 Intent intent1 = new Intent(Examen.this, Examenes.class);
                 startActivity(intent1);
                 finish();
             } catch (IOException e) {
-                helper.deleteExamen(ID);
+                helper.deleteExamen(ID,ExamenEscogido.getNombre());
                 Intent intent1 = new Intent(Examen.this, Examenes.class);
                 startActivity(intent1);
                 finish();

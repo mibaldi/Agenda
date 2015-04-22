@@ -14,11 +14,9 @@ import BD.EAsignatura;
 
 public class Asignatura extends ActionBarActivity {
     private BD objAsignaturas;
-    private TextView nombreAsig,eval;
+    private TextView nombreAsig,eval,notaMax;
     private String ID;
     private EAsignatura asigEscogida;
-    private static final int CONTEXT_EDIT = 0;
-    private static final int CONTEXT_DELETE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -32,8 +30,10 @@ public class Asignatura extends ActionBarActivity {
         asigEscogida=objAsignaturas.getEAsignatura(ID);
         nombreAsig= (TextView)findViewById(R.id.NombreAsig);
         eval= (TextView)findViewById(R.id.eval);
+        notaMax= (TextView)findViewById(R.id.notaMax);
         if (asigEscogida!=null){
             nombreAsig.setText(asigEscogida.getNombre());
+            notaMax.setText(String.valueOf(asigEscogida.getNota()));
             eval.setText(asigEscogida.getEvaluacion());
             String enlaces= asigEscogida.getEnlaces();
             String enlacesSueltos[]=enlaces.split("[;]");
@@ -52,27 +52,4 @@ public class Asignatura extends ActionBarActivity {
         }
 
     }
-
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_asignatura, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 }

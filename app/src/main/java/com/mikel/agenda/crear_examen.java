@@ -19,18 +19,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.Event;
@@ -40,7 +34,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.logging.Level;
 
 import BD.BD;
 import BD.EAsignatura;
@@ -66,24 +59,14 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
     EditText etNombre,etNotaMax,etNota;
     private BD objAsignaturas;
     private Cursor cursor;
-    private ListView list;
     private SimpleCursorAdapter adapter;
-    TimePicker hora;
     String nombre="";
 
     /////////////////////////////////////
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
-    static final int REQUEST_AUTHORIZATION = 1;
-    static final int REQUEST_ACCOUNT_PICKER = 2;
-    private final static int ADD_OR_EDIT_CALENDAR_REQUEST = 3;
-    private static final Level LOGGING_LEVEL = Level.CONFIG;
-    private static final String PREF_ACCOUNT_NAME = "accountName";
-    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-    GoogleAccountCredential credential;
+    
     com.google.api.services.calendar.Calendar client;
     CalendarModel model;
-    int numAsyncTasks,notaMax;
+    float notaMax;
     ArrayAdapter<CalendarInfo> adapter2;
     Boolean resp=false;
     String calendarId,eventoId="";
@@ -92,7 +75,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
     BD helper;
     Boolean nota_correcta=true;
 
-    private TextView mTimeDisplay;
+
     private Button mPickTime;
     private int mHour;
     private int mMinute;
@@ -122,7 +105,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    int val = Integer.parseInt(s.toString());
+                    float val = Float.parseFloat(s.toString());
                     if(val > notaMax) {
                         s.replace(0, s.length(), String.valueOf(notaMax));
                     } else if(val < 0) {
@@ -150,8 +133,8 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    int val = Integer.parseInt(s.toString());
-                    int n=Integer.parseInt(etNotaMax.getText().toString());
+                    float val = Float.parseFloat(s.toString());
+                    float n=Float.parseFloat(etNotaMax.getText().toString());
                     if(val > n) {
                         s.replace(0, s.length(), String.valueOf(n));
                     } else if(val < 0) {
@@ -183,7 +166,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
         guardar=(Button)findViewById(R.id.GuardarExamen);
         etNombre= (EditText) findViewById(R.id.editText2);
        // etvalor= (EditText) findViewById(R.id.valor);
-        mTimeDisplay =(TextView) findViewById(R.id.textView8);
+
         mPickTime=(Button)findViewById(R.id.button3);
         mPickTime.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -235,33 +218,6 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
         return null;
     }
 
-    /* @Override
-         protected void onResume() {
-             super.onResume();
-             if (checkGooglePlayServicesAvailable()) {
-                 haveGooglePlayServices();
-             }
-         }
-
-         public boolean onCreateOptionsMenu(Menu menu) {
-             MenuInflater inflater = getMenuInflater();
-             inflater.inflate(R.menu.main_menu, menu);
-             return super.onCreateOptionsMenu(menu);
-         }
-         verride
-        /* public boolean onOptionsItemSelected(MenuItem item) {
-             switch (item.getItemId()) {
-                 case R.id.menu_refresh:
-                     //AsyncLoadCalendars.run(this);
-                     break;
-                 case R.id.menu_accounts:
-                     chooseAccount();
-                     return true;
-             }
-             return super.onOptionsItemSelected(item);
-         }
-     */
-
     public void EscogerFecha(View view){
         DatePickerDialog.OnDateSetListener mdpd=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -311,8 +267,8 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
             nota=new ENota();
             nota.setAsignatura(text);
             nota.setExamen(nombre);
-            nota.setNota(Integer.parseInt(etNota.getText().toString()));
-            nota.setNota_sobre(Integer.parseInt(etNotaMax.getText().toString()));
+            nota.setNota(Float.parseFloat(etNota.getText().toString()));
+            nota.setNota_sobre(Float.parseFloat(etNotaMax.getText().toString()));
             if (nota.getNota()>nota.getNota_sobre()){
                 nota_correcta=false;
                 if(etNota.requestFocus()) {
@@ -367,6 +323,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
         protected String doInBackground(String... params) {
             int id=spnCal.getSelectedItemPosition();
             CalendarInfo CI = adapter2.getItem(id);
+
             calendarId=CI.id;
             Event event= new Event();
 
@@ -396,6 +353,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
                 eventoId=createdEvent.getId();
                 examen.setCalendarioid(calendarId);
                 examen.setEventoid(eventoId);
+                examen.setCalendarionombre(CI.summary);
                 respuesta=helper.insertarExamen(examen);
                 if(respuesta==-1 || !nota_correcta){
                     client.events().delete(calendarId,eventoId).execute();
@@ -494,39 +452,4 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
 
         }
     }
-
-    ////////////////////////////////////////////////
-    /*void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                        connectionStatusCode, crear_examen.this, REQUEST_GOOGLE_PLAY_SERVICES);
-                dialog.show();
-            }
-        });}
-
-    /// Check that Google Play services APK is installed and up to date.
-    private boolean checkGooglePlayServicesAvailable() {
-        final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
-            return false;
-        }
-        return true;
-    }
-    private void haveGooglePlayServices() {
-        // check if there is already an account selected
-        if (credential.getSelectedAccountName() == null) {
-            // ask user to choose account
-            chooseAccount();
-        } else {
-            // load calendars
-            //AsyncLoadCalendars.run(this);
-        }
-    }
-
-    private void chooseAccount() {
-        startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
-    }*/
-
 }

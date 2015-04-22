@@ -23,7 +23,7 @@ import BD.EAsignatura;
 
 
 public class crear_asignatura extends ActionBarActivity {
-    EditText texto, NotaSobre;
+    EditText texto;
     RadioGroup radioEvalucionGroup;
     RadioButton radioEleccion;
     LinearLayout ll2;
@@ -95,9 +95,9 @@ public class crear_asignatura extends ActionBarActivity {
                     int selectId = radioEvalucionGroup.getCheckedRadioButtonId();
                     radioEleccion = (RadioButton) findViewById(selectId);
                     asig.setEvaluacion(radioEleccion.getText().toString());
-                    int nota = 100;
+                    float nota = 100;
                     if (!NotaSobre.getText().toString().matches("")) {
-                        nota = Integer.parseInt(NotaSobre.getText().toString());
+                        nota = Float.parseFloat(NotaSobre.getText().toString());
                     }
                     asig.setNota(nota);
                     long res = helper.insertarAsignatura(asig);
@@ -107,13 +107,9 @@ public class crear_asignatura extends ActionBarActivity {
                     } else
                         Toast.makeText(getApplicationContext(), "No se ha guardado la asignatura", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
     }
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -127,27 +123,4 @@ public class crear_asignatura extends ActionBarActivity {
         outState.putStringArrayList("allEds", alist);
         outState.putInt("et", et);
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_crear_asignatura, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
 }

@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +27,11 @@ public class Modificar_Asignatura extends ActionBarActivity {
     private TextView nombreAsig;
     private String ID;
     private EAsignatura asigEscogida;
-    private RadioGroup radioEvalucionGroup;
-
     EditText texto,nota;
     ArrayList<String> alist=new ArrayList<String>();
     int et;
+    Spinner spinner_evaluacion;
+    ArrayAdapter spinner_adapter;
     List<EditText> allEds = new ArrayList<EditText>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +45,30 @@ public class Modificar_Asignatura extends ActionBarActivity {
         setContentView(R.layout.activity_modificar__asignatura);
         Intent intent =getIntent();
         ID=intent.getStringExtra("ID");
-        LinearLayout ll2 = (LinearLayout) findViewById(R.id.ll2);
+        final LinearLayout ll2 = (LinearLayout) findViewById(R.id.ll2);
         objAsignaturas = new BD(this);
         asigEscogida=objAsignaturas.getEAsignatura(ID);
         nombreAsig= (TextView)findViewById(R.id.NombreAsig);
         Button guardar=(Button)findViewById(R.id.save);
         texto=(EditText)findViewById(R.id.texto);
         nota=(EditText)findViewById(R.id.nota);
+        Button ib = (Button) findViewById(R.id.ib);
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText temp = new EditText(Modificar_Asignatura.this);
+                temp.setWidth(ll2.getWidth());
+                allEds.add(temp);
+                ll2.addView(temp);
+            }
+        });
+        spinner_evaluacion = (Spinner) findViewById(R.id.spinner_evaluacion);
+        spinner_adapter = ArrayAdapter.createFromResource(this, R.array.evaluación, android.R.layout.simple_spinner_item);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_evaluacion.setAdapter(spinner_adapter);
+        int spinnerPosition=spinner_adapter.getPosition(asigEscogida.getEvaluacion());
+        spinner_evaluacion.setSelection(spinnerPosition);
+        spinnerPosition=0;
         if (asigEscogida!=null){
             nombreAsig.setText(asigEscogida.getNombre());
             String enlaces= asigEscogida.getEnlaces();
@@ -64,17 +82,12 @@ public class Modificar_Asignatura extends ActionBarActivity {
                     ll2.addView(texto);
                 }
             }
-
         nota.setText(String.valueOf(asigEscogida.getNota()));
 
         }else{
             nombreAsig.setText("sin Asignatura");
         }
     }
-
-
-
-
     public void guardar(View view){
         EAsignatura asigModificada=new EAsignatura();
         asigModificada.setId(asigEscogida.getId());
@@ -88,7 +101,9 @@ public class Modificar_Asignatura extends ActionBarActivity {
         }
         String enlaces=Joiner.on(';').join(a);
         asigModificada.setEnlaces(enlaces);
-        asigModificada.setNota(Integer.parseInt(nota.getText().toString()));
+        asigModificada.setNota(Float.parseFloat(nota.getText().toString()));
+
+        asigModificada.setEvaluacion(spinner_evaluacion.getSelectedItem().toString());
         int respuesta=objAsignaturas.updateAsignatura(asigModificada);
         if (respuesta>0){
             Toast.makeText(getApplicationContext(), "Modificación realizada", Toast.LENGTH_SHORT).show();

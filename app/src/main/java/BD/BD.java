@@ -3,6 +3,7 @@ package BD;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -17,6 +18,7 @@ public class BD  extends SQLiteOpenHelper{
     private static final String DB_NAME= "agenda";
     private static final int SCHEME_VERSION = 2;
     private SQLiteDatabase db;
+    String columnasExamen[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID,EExamen.FIELD_CALENDARIONOMBRE};
     public BD(Context context) {
         super(context, DB_NAME, null, SCHEME_VERSION);
         Log.e("HolaMundo", "se ha creado la bd");
@@ -45,6 +47,7 @@ public class BD  extends SQLiteOpenHelper{
         valores.put(EExamen.FIELD_HORA,examen.getHora());
         valores.put(EExamen.FIELD_TIPOGUARDADO,examen.getTipoGuardado());
         valores.put(EExamen.FIELD_CALENDARIOID,examen.getCalendarioid());
+        valores.put(EExamen.FIELD_CALENDARIONOMBRE,examen.getCalendarionombre());
         valores.put(EExamen.FIELD_EVENTOID,examen.getEventoid());
         return valores;
     }
@@ -85,15 +88,15 @@ public class BD  extends SQLiteOpenHelper{
         return c;
     }
     public Cursor getExamenesCursor(){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
+       // String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
         String orderBy =  EExamen.FIELD_ASIGNATURA;
-        Cursor c= db.query(EExamen.TABLE_NAME,columnas,null,null,null,null,orderBy);
+        Cursor c= db.query(EExamen.TABLE_NAME,columnasExamen,null,null,null,null,orderBy);
         return c;
     }
     public Cursor getExamenesAsignaturaCursor(String Asignatura){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
+        //String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
         String orderBy =  EExamen.FIELD_ASIGNATURA;
-        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ASIGNATURA+"=?",new String[]{Asignatura},null,null,orderBy);
+        Cursor c= db.query(EExamen.TABLE_NAME,columnasExamen,EExamen.FIELD_ASIGNATURA+"=?",new String[]{Asignatura},null,null,orderBy);
         return c;
     }
     public Cursor buscarAsignatura(String nombre){
@@ -103,30 +106,30 @@ public class BD  extends SQLiteOpenHelper{
         return c;
     }
     public Cursor buscarExamen(String nombre){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
-        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
+        //String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
+        Cursor c= db.query(EExamen.TABLE_NAME,columnasExamen,EExamen.FIELD_NOMBRE+"=?",new String[]{nombre},null,null,null);
         return c;
     }
     /*17-04-15 al 8-05-15*/
     public long countExamenesAsig(String asig){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
-        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ASIGNATURA+"=?",new String[]{asig},null,null,null);
+        //String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
+        Cursor c= db.query(EExamen.TABLE_NAME,columnasExamen,EExamen.FIELD_ASIGNATURA+"=?",new String[]{asig},null,null,null);
         return c.getCount();
     }
     /*19-04-15*/
-    public int getNotaRestante(String asig){
+    public float getNotaRestante(String asig){
         String columnas[]={ENota.FIELD_EXAMEN,ENota.FIELD_ASIGNATURA,ENota.FIELD_NOTA,ENota.FIELD_NOTASOBRE};
         Cursor c= db.query(ENota.TABLE_NAME,columnas,ENota.FIELD_ASIGNATURA+"=?",new String[]{asig},null,null,null);
         Cursor c2 =buscarAsignatura(asig);
-        int nota=100;
+        float nota=100;
         if (c2.moveToFirst()){
-            nota=c2.getInt(c2.getColumnIndexOrThrow(EAsignatura.FIELD_NOTA));
+            nota=c2.getFloat(c2.getColumnIndexOrThrow(EAsignatura.FIELD_NOTA));
         }
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                nota=nota-c.getInt(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
+                nota=nota-c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
             } while(c.moveToNext());
         }
         return nota;
@@ -141,7 +144,7 @@ public class BD  extends SQLiteOpenHelper{
         String rowName = c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOMBRE));
         String rowEnlaces= c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_ENLACES));
         String rowEvaluacion= c.getString(c.getColumnIndexOrThrow(EAsignatura.FIELD_EVALUACION));
-        int rowNota= c.getInt(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOTA));
+        float rowNota= c.getFloat(c.getColumnIndexOrThrow(EAsignatura.FIELD_NOTA));
         EAsignatura asig= new EAsignatura(rowName);
         asig.setId(Integer.parseInt(ID));
         asig.setEnlaces(rowEnlaces);
@@ -153,9 +156,9 @@ public class BD  extends SQLiteOpenHelper{
     }
 
     public EExamen getEExamen(String ID){
-        String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
+        //String columnas[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID};
 
-        Cursor c= db.query(EExamen.TABLE_NAME,columnas,EExamen.FIELD_ID+"=?",new String[]{ID},null,null,null);
+        Cursor c= db.query(EExamen.TABLE_NAME,columnasExamen,EExamen.FIELD_ID+"=?",new String[]{ID},null,null,null);
         if (c.getCount()>0){
             c.moveToFirst();
             Log.e("numero", String.valueOf(c.getCount()));
@@ -166,6 +169,7 @@ public class BD  extends SQLiteOpenHelper{
             String rowTipoGuardado= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_TIPOGUARDADO));
             String rowCalendarioId= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_CALENDARIOID));
             String rowEventoId= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_EVENTOID));
+            String rowCalendarioNombre=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_CALENDARIONOMBRE));
             EExamen exa= new EExamen(rowName);
             exa.setAsignatura(rowAsig);
             exa.setFecha(rowFecha);
@@ -173,43 +177,118 @@ public class BD  extends SQLiteOpenHelper{
             exa.setTipoGuardado(rowTipoGuardado);
             exa.setCalendarioid(rowCalendarioId);
             exa.setEventoid(rowEventoId);
+            exa.setCalendarionombre(rowCalendarioNombre);
+            exa.setId(Integer.parseInt(ID));
             return exa;
         }else
             return null;
 
 
     }
-    public void deleteExamen(String ID){
+    //CAMBIAR POR DB.DELETE
+    public long deleteExamen(String ID,String nombre){
         int id=Integer.valueOf(ID);
 
-        String consulta= "delete from examenes where _id="+id;
-        db.execSQL(consulta);
+        try {
+            db.beginTransaction();
+            db.delete(EExamen.TABLE_NAME, EExamen.FIELD_ID + "=" + id, null);
+            deleteNotaExamen(nombre);
+            db.setTransactionSuccessful();
+        } catch(SQLException e) {
+            // do some error handling
+            return 0;
+        } finally {
+            db.endTransaction();
+            return 1;
+        }
+      // return db.delete(EExamen.TABLE_NAME, EExamen.FIELD_ID + "=" + id, null);
+       /* String consulta= "delete from examenes where _id="+id;
+        db.execSQL(consulta);*/
+    }
+    public long deleteNotaExamen(String examen){
+        String[] args = new String[]{examen};
+        return db.delete(ENota.TABLE_NAME, ENota.FIELD_EXAMEN + "=?", args);
     }
 
-
+    //CAMBIAR POR DB.DELETE
    /*17-04-15 al 8-05-15*/
     public int deleteAsignatura(int id,String asignatura){
        if(countExamenesAsig(asignatura)==0){
-           String consulta= "delete from "+ EAsignatura.TABLE_NAME+" where "+ EAsignatura.FIELD_ID+" = "+id;
+           /*String consulta= "delete from "+ EAsignatura.TABLE_NAME+" where "+ EAsignatura.FIELD_ID+" = "+id;
            db.execSQL(consulta);
-           return 200;//se puede seguir asignatura borrada
+           return 200;//se puede seguir asignatura borrada*/
+           String[] args = new String[]{String.valueOf(id)};
+           return db.delete(EAsignatura.TABLE_NAME, EAsignatura.FIELD_ID + "=?", args);
        }else{
            return -1;//no se puede borrar
 
        }
     }
     /*20-04-15*/
-    //  NO FUNCIONA COMPROBAR
     public int updateAsignatura(EAsignatura asignatura){
         String id=String.valueOf(asignatura.getId());
         String[] args = new String[]{id};
         ContentValues nuevoRegistro = new ContentValues();
         nuevoRegistro.put(EAsignatura.FIELD_ENLACES,asignatura.getEnlaces());
         nuevoRegistro.put(EAsignatura.FIELD_NOTA, asignatura.getNota());
+        nuevoRegistro.put(EAsignatura.FIELD_EVALUACION,asignatura.getEvaluacion());
         int res= db.update(EAsignatura.TABLE_NAME,nuevoRegistro,EAsignatura.FIELD_ID + " =?",args);
         return  res;
     }
+    /*21-04-15*/
+    public String getNotaExamen(String examen){
+        String res="";
+        String columnas[]={ENota.FIELD_EXAMEN,ENota.FIELD_ASIGNATURA,ENota.FIELD_NOTA,ENota.FIELD_NOTASOBRE};
+        Cursor c= db.query(ENota.TABLE_NAME,columnas,ENota.FIELD_EXAMEN+"=?",new String[]{examen},null,null,null);
+        if (c.moveToFirst()){
+            float nota=c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTA));
+            float notaMax=c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
+            res=nota+"/"+notaMax;
+        }
+        return res;
+    }
+    public ENota getNotaExamenObj(String examen){
 
+        String columnas[]={ENota.FIELD_ID,ENota.FIELD_EXAMEN,ENota.FIELD_ASIGNATURA,ENota.FIELD_NOTA,ENota.FIELD_NOTASOBRE};
+        Cursor c= db.query(ENota.TABLE_NAME,columnas,ENota.FIELD_EXAMEN+"=?",new String[]{examen},null,null,null);
+        ENota notaExamen=new ENota();
+        if (c.moveToFirst()){
+            float nota=c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTA));
+            float notaMax=c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
+            String asig=c.getString(c.getColumnIndexOrThrow(ENota.FIELD_ASIGNATURA));
+            int id=c.getInt(c.getColumnIndexOrThrow(ENota.FIELD_ID));
+            notaExamen.setExamen(examen);
+            notaExamen.setNota(nota);
+            notaExamen.setNota_sobre(notaMax);
+            notaExamen.setAsignatura(asig);
+            notaExamen.setId(id);
+        }
+        return notaExamen;
+    }
+    /*21-04-15*/
+    public int updateExamen(EExamen examen,ENota nota){
+
+        String e=String.valueOf(nota.getExamen());
+        String[] args2= new String[]{e};
+        ContentValues nuevoRegistro = new ContentValues();
+        nuevoRegistro.put(EExamen.FIELD_ASIGNATURA,examen.getAsignatura());
+        nuevoRegistro.put(EExamen.FIELD_FECHA,examen.getFecha());
+        nuevoRegistro.put(EExamen.FIELD_HORA,examen.getHora());
+        nuevoRegistro.put(EExamen.FIELD_CALENDARIOID,examen.getCalendarioid());
+        nuevoRegistro.put(EExamen.FIELD_EVENTOID,examen.getEventoid());
+        nuevoRegistro.put(EExamen.FIELD_TIPOGUARDADO,examen.getTipoGuardado());
+        nuevoRegistro.put(EExamen.FIELD_CALENDARIONOMBRE,examen.getCalendarionombre());
+        ContentValues nuevoRegistroNota = new ContentValues();
+        nuevoRegistroNota.put(ENota.FIELD_ASIGNATURA,examen.getAsignatura());
+        nuevoRegistroNota.put(ENota.FIELD_NOTA,nota.getNota());
+        nuevoRegistroNota.put(ENota.FIELD_NOTASOBRE,nota.getNota_sobre());
+        int res2=0;
+        int res= db.update(EExamen.TABLE_NAME,nuevoRegistro,EExamen.FIELD_ID + " ="+examen.getId(),null);
+        if(res>0){
+            res2=db.update(ENota.TABLE_NAME,nuevoRegistroNota,ENota.FIELD_EXAMEN+"=?",args2);
+        }
+        return  res+res2;
+    }
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(EAsignatura.CREATE_DB_TABLE);
@@ -221,9 +300,11 @@ public class BD  extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String SQLUpdateV2 = "ALTER TABLE "+ EAsignatura.TABLE_NAME+" ADD COLUMN "+ EAsignatura.FIELD_NOTA +" INT";
+        String SQLUpdateV2 = "ALTER TABLE "+ EAsignatura.TABLE_NAME+" ADD COLUMN "+ EAsignatura.FIELD_NOTA +" float";
+        String SQLUpdateV2Examen = "ALTER TABLE "+ EExamen.TABLE_NAME+" ADD COLUMN "+ EExamen.FIELD_CALENDARIONOMBRE +" text";
         if(oldVersion == 1 && newVersion == 2){
             db.execSQL(SQLUpdateV2);
+            db.execSQL(SQLUpdateV2Examen);
             db.execSQL(ENota.CREATE_DB_TABLE);
         }
     }
