@@ -1,7 +1,5 @@
 package com.mikel.agenda;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -44,6 +42,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
     List<String> listDataHeader;
     private static final int CONTEXT_EDIT = 0;
     private static final int CONTEXT_DELETE = 1;
+    private static final int CONTEXT_CALENDAR = 2;
 
 
     HashMap<String, List<String>> listDataChild;
@@ -109,9 +108,9 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
             }
         });
 
@@ -120,9 +119,9 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
 
             }
         });
@@ -209,8 +208,9 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
 
             // Show context menu for children
         } else if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+
             menu.add(0, CONTEXT_EDIT, 0, R.string.edit);
-            menu.add(0, CONTEXT_DELETE, 0, R.string.delete);
+            //menu.add(0, CONTEXT_DELETE, 0, R.string.delete);
         }
 
 
@@ -236,7 +236,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
                 startActivity(intent);
                 return true;
 
-            case CONTEXT_DELETE:
+            /*case CONTEXT_DELETE:
                 new AlertDialog.Builder(this).setTitle(R.string.delete_title)
                         .setMessage(nombre)
                         .setCancelable(true)
@@ -245,7 +245,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
                             public void onClick(DialogInterface dialog, int which) {
                                 long res=helper.deleteExamen(String.valueOf(rowId),nombre);
                                 if(res==0){
-                                    Toast.makeText(getApplicationContext(), "No se pueden borrar asignaturas con examenes", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "No se puede borrar el examen", Toast.LENGTH_SHORT).show();
                                 }else{
                                     Toast.makeText(getApplicationContext(), "Examen borrado", Toast.LENGTH_SHORT).show();
                                     finish();
@@ -258,7 +258,7 @@ public class Examenes extends ActionBarActivity implements ListView.OnItemClickL
                         .setNegativeButton(R.string.no, null)
                         .create()
                         .show();
-                return true;
+                return true;*/
 
         }
 

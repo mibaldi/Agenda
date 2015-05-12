@@ -1,9 +1,11 @@
 package com.mikel.agenda;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -74,7 +77,7 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
     ENota nota;
     BD helper;
     Boolean nota_correcta = true;
-
+    String descripción;
 
     private Button mPickTime;
     private int mHour;
@@ -94,6 +97,7 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
         cursor = helper.getAsignaturasCursor();
         client = ActividadPrincipal.client;
         ExamenEscogido = helper.getEExamen(ID);
+        descripción=ExamenEscogido.getDescripcion();
         NotaEscogido = helper.getNotaExamenObj(ExamenEscogido.getNombre());
         etNotaMax = (EditText) findViewById(R.id.notaMax);
         etNotaMax.setText(String.valueOf(NotaEscogido.getNota_sobre()));
@@ -180,12 +184,17 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
         a = calendar.get(java.util.Calendar.YEAR);
         m = calendar.get(java.util.Calendar.MONTH);
         d = calendar.get(java.util.Calendar.DAY_OF_MONTH);
-        mes = m + 1;
+
         fecha.setText(ExamenEscogido.getFecha());
         guardar = (Button) findViewById(R.id.GuardarExamen);
         tvNombre = (TextView) findViewById(R.id.nombre);
         tvNombre.setText(ExamenEscogido.getNombre());
-
+        String fechaRota = fecha.getText().toString();
+        String[] campos2 = fechaRota.split("/");
+        d=Integer.parseInt(campos2[0]);
+        m=Integer.parseInt(campos2[1])-1;
+        a=Integer.parseInt(campos2[2]);
+        mes = m + 1;
         mPickTime = (Button) findViewById(R.id.button3);
         mPickTime.setText(ExamenEscogido.getHora());
         mPickTime.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +289,7 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
         examenModificado.setAsignatura(text);
         examenModificado.setFecha(fecha.getText().toString());
         examenModificado.setHora(mPickTime.getText().toString());
+        examenModificado.setDescripcion(descripción);
         String horaRota = mPickTime.getText().toString();
         String[] campos = horaRota.split(":");
         calendar.set(java.util.Calendar.MINUTE, Integer.parseInt(campos[1]));
@@ -287,6 +297,8 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
         notaModificada = new ENota();
         notaModificada.setExamen(ExamenEscogido.getNombre());
         notaModificada.setAsignatura(text);
+        if (etNota.getText().toString().matches("")) etNota.setText("0");
+        if(etNotaMax.getText().toString().matches("")) etNotaMax.setText("0");
         notaModificada.setNota(Float.parseFloat(etNota.getText().toString()));
         notaModificada.setNota_sobre(Float.parseFloat(etNotaMax.getText().toString()));
         if (notaModificada.getNota() > notaModificada.getNota_sobre()) {
@@ -316,9 +328,47 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
             }
         }
     }
+    public void descripcion(View view){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Modificar_Examen.this);
+        alertDialog.setTitle("DESCRIPCIÓN");
+        alertDialog.setMessage("Inserta la descripción");
+
+        final EditText input = new EditText(Modificar_Examen.this);
+        input.setText(descripción);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setPositiveButton("ACEPTAR",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        descripción = input.getText().toString();
+                    }
+                });
+
+        alertDialog.setNegativeButton("CANCELAR",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
+    }
 
     private class CallAPI extends AsyncTask<String, String, String> {
-
+        ProgressDialog pd;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(Modificar_Examen.this);
+            pd.setMessage("Modificando examen");
+            pd.setCancelable(false);
+            pd.show();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -380,6 +430,9 @@ public class Modificar_Examen extends ActionBarActivity implements AdapterView.O
 
         @Override
         protected void onPostExecute(String s) {
+            if (pd!=null){
+                pd.dismiss();
+            }
             if (respuesta != 2) {
                 Toast.makeText(getApplicationContext(), "No se ha podido actualizar", Toast.LENGTH_SHORT).show();
             } else {

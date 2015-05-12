@@ -68,5 +68,20 @@
         android:text="hola"
         android:textSize="25dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView23"
+        android:text="Nota total:"
+        android:textSize="25dp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notaTotal"
+        android:text="hola"
+        android:textSize="25dp" />
+
 </LinearLayout>
 </ScrollView>

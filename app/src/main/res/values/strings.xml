@@ -24,7 +24,8 @@
     <string name="title_activity_examen">Examen</string>
     <string name="title_activity_calendar">Calendar</string>
     <string name="accounts">Accounts</string>
-
+    <string name="editar">Editar</string>
+    <string name="borrar">Borrar</string>
     <string name="description_add">Add Calendar</string>
 
     <string name="summary">Title</string>
@@ -59,5 +60,9 @@
     <string name="title_activity_contacto">Contacto</string>
     <string name="title_activity_modificar__asignatura">Modificar_Asignatura</string>
     <string name="title_activity_modificar__examen">Modificar_Examen</string>
+
+    <string name="download_progress">Download Progress:</string>
+    <string name="button_subscribe">Listen for Changes</string>
+    <string name="button_unsubscribe">Stop Listening for Changes</string>
 
 </resources>

@@ -1,9 +1,12 @@
 package com.mikel.agenda;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -74,7 +78,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
     ENota nota;
     BD helper;
     Boolean nota_correcta=true;
-
+    String descripción="";
 
     private Button mPickTime;
     private int mHour;
@@ -89,6 +93,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_crear_examen);
         objAsignaturas = new BD(this);
         cursor=objAsignaturas.getAsignaturasCursor();
+
         etNotaMax=(EditText)findViewById(R.id.notaMax);
         etNotaMax.addTextChangedListener(new TextWatcher() {
 
@@ -117,36 +122,6 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
                 }
             }
         });
-        etNota=(EditText)findViewById(R.id.nota);
-        etNota.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                try {
-                    float val = Float.parseFloat(s.toString());
-                    float n=Float.parseFloat(etNotaMax.getText().toString());
-                    if(val > n) {
-                        s.replace(0, s.length(), String.valueOf(n));
-                    } else if(val < 0) {
-                        s.replace(0,s.length(),"0");
-
-                    }
-                } catch (NumberFormatException ex) {
-                    // Do something
-                }
-            }
-        });
-
         String[] from = {EAsignatura.FIELD_NOMBRE};
         int[] to = new int[]{android.R.id.text1};
         adapter= new SimpleCursorAdapter(this,android.R.layout.simple_list_item_1,cursor,from,to);
@@ -186,6 +161,36 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
 
 
 
+    }
+    public void descripcion(View view){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(crear_examen.this);
+        alertDialog.setTitle("DESCRIPCIÓN");
+        alertDialog.setMessage("Inserta la descripción");
+
+        final EditText input = new EditText(crear_examen.this);
+        input.setText(descripción);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setPositiveButton("ACEPTAR",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        descripción = input.getText().toString();
+                    }
+                });
+
+        alertDialog.setNegativeButton("CANCELAR",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
     }
     private void updateDisplay(){
         mPickTime.setText(
@@ -262,12 +267,13 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
 
             String horaString = mPickTime.getText().toString();
             examen.setHora(horaString);
+            examen.setDescripcion(descripción);
 
            ////PRUEBA
             nota=new ENota();
             nota.setAsignatura(text);
             nota.setExamen(nombre);
-            nota.setNota(Float.parseFloat(etNota.getText().toString()));
+            nota.setNota(Float.parseFloat("0"));
             nota.setNota_sobre(Float.parseFloat(etNotaMax.getText().toString()));
             if (nota.getNota()>nota.getNota_sobre()){
                 nota_correcta=false;
@@ -290,11 +296,16 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
                 if (respuesta==-1 ){
                         Toast.makeText(getApplicationContext(), "No se ha podido insertar en local", Toast.LENGTH_SHORT).show();
                 }else{
+                    Cursor cursor=helper.buscarExamen(examen.getNombre());
+                    cursor.moveToPosition(0);
+                    String rowId = cursor.getString(cursor.getColumnIndexOrThrow(EExamen.FIELD_ID));
+                    Intent intent = new Intent(crear_examen.this, Examen.class);
+                    intent.putExtra("ID",String.valueOf(rowId));
+                    startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Examen guardado en local", Toast.LENGTH_SHORT).show();
                 }
             }
         }
-
     }
 
 
@@ -318,7 +329,15 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
 
     private class CallAPI extends AsyncTask<String, String, String> {
 
-
+        ProgressDialog pd;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(crear_examen.this);
+            pd.setMessage("Creando examen");
+            pd.setCancelable(false);
+            pd.show();
+        }
         @Override
         protected String doInBackground(String... params) {
             int id=spnCal.getSelectedItemPosition();
@@ -368,9 +387,18 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
 
         @Override
         protected void onPostExecute(String s) {
+            if (pd!=null){
+                pd.dismiss();
+            }
             if (respuesta==-1){
                     Toast.makeText(getApplicationContext(), "No se ha podido insertar", Toast.LENGTH_SHORT).show();
             }else{
+                Cursor cursor=helper.buscarExamen(examen.getNombre());
+                cursor.moveToPosition(0);
+                String rowId = cursor.getString(cursor.getColumnIndexOrThrow(EExamen.FIELD_ID));
+                Intent intent = new Intent(crear_examen.this, Examen.class);
+                intent.putExtra("ID",String.valueOf(rowId));
+                startActivity(intent);
                 Toast.makeText(getApplicationContext(), "Examen guardado en Local y en Google Calendar", Toast.LENGTH_SHORT).show();
             }
         }

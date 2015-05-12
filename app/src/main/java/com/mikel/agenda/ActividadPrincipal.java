@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import BD.BD;
+import drive.Backup;
 import mycalendar.CalendarInfo;
 import mycalendar.CalendarModel;
 ////////////////////////////
@@ -52,6 +53,10 @@ public class ActividadPrincipal extends ActionBarActivity {
     public static CalendarModel model = new CalendarModel();
     int numAsyncTasks;
     String token;
+    BD helper;
+    Intent intent3;
+    Boolean actualizado;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +64,8 @@ public class ActividadPrincipal extends ActionBarActivity {
         // TODO: Update with your API key
         Mint.initAndStartSession(ActividadPrincipal.this, "8df501b1");
         setContentView(R.layout.activity_actividad_principal);
-
-
-        BD helper= new BD(this);
-
+        helper= new BD(this);
+        cargarConfiguracion();
         // enable logging
         Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
         // Google Accounts
@@ -75,10 +78,9 @@ public class ActividadPrincipal extends ActionBarActivity {
                 transport, jsonFactory, credential).setApplicationName("Baldugenda")
                 .build();
         model = new CalendarModel();
-        if(!helper.isActualizado()){
-            helper.actualizar_schema2();
-        }
+
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -96,7 +98,9 @@ public class ActividadPrincipal extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
-                //AsyncLoadCalendars.run(this);
+                helper.closeBD();
+                intent3 = new Intent(ActividadPrincipal.this, Backup.class);
+                startActivity(intent3);
                 break;
             case R.id.menu_accounts:
                 chooseAccount();
@@ -198,10 +202,32 @@ public class ActividadPrincipal extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }*/
+    //guardar configuración aplicación Android usando SharedPreferences
+    public void guardarConfiguracion()
+    {
+        SharedPreferences prefs =
+                getSharedPreferences("preferenciasApp", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("actualizado",true);
+        editor.putString("driveID","");
+        editor.commit();
+    }
 
+    //cargar configuración aplicación Android usando SharedPreferences
+    public void cargarConfiguracion()
+    {
+        SharedPreferences prefs =
+                getSharedPreferences("preferenciasApp", Context.MODE_PRIVATE);
+        actualizado=prefs.getBoolean("actualizado",false);
+    }
 
 
     public void onClickButton(View v) {
+        if(!actualizado){
+            helper.actualizar_schema2();
+            guardarConfiguracion();
+            actualizado=true;
+        }
         Intent intent1,intent2;
         switch (v.getId()){
             case R.id.bt_listaAsignaturas:

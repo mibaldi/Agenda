@@ -45,6 +45,13 @@
         android:text="hola"
         android:textSize="25dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Descripción"
+        android:id="@+id/button4"
+        android:onClick="descripcion" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,5 +1,7 @@
 package com.mikel.agenda;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
@@ -103,6 +105,12 @@ public class crear_asignatura extends ActionBarActivity {
                     long res = helper.insertarAsignatura(asig);
 
                     if (res != -1) {
+                        Cursor cursor=helper.buscarAsignatura(asig.getNombre());
+                        cursor.moveToPosition(0);
+                        String rowId = cursor.getString(cursor.getColumnIndexOrThrow(EAsignatura.FIELD_ID));
+                        Intent intent = new Intent(crear_asignatura.this, Asignatura.class);
+                        intent.putExtra("ID",String.valueOf(rowId));
+                        startActivity(intent);
                         Toast.makeText(getApplicationContext(), "Asignatura guardada", Toast.LENGTH_SHORT).show();
                     } else
                         Toast.makeText(getApplicationContext(), "No se ha guardado la asignatura", Toast.LENGTH_SHORT).show();

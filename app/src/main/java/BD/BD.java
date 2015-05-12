@@ -19,17 +19,36 @@ import java.util.ArrayList;
  * Created by Mikel on 03/02/2015.
  */
 public class BD  extends SQLiteOpenHelper{
-    private static final String DB_NAME= "agenda";
-    private static final int SCHEME_VERSION = 2;
-    private static boolean actualizado;
-    private SQLiteDatabase db;
+    public static final String DB_NAME= "agenda";
+    private static final int SCHEME_VERSION = 3;
 
-    String columnasExamen[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID,EExamen.FIELD_CALENDARIONOMBRE};
+    private static SQLiteDatabase db;
+
+    String columnasExamen[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID,EExamen.FIELD_CALENDARIONOMBRE,EExamen.FIELD_DESCRIPCION};
     public BD(Context context) {
         super(context, DB_NAME, null, SCHEME_VERSION);
         Log.e("HolaMundo", "se ha creado la bd");
         db=this.getWritableDatabase();
     }
+
+    public int openBD(){
+        try{
+            db=this.getWritableDatabase();
+            return 1;
+        }catch(Exception e){
+            return -1;
+        }
+    }
+    public static int closeBD(){
+        try{
+            db.close();
+            return 1;
+        }catch(Exception e){
+            return -1;
+        }
+
+    }
+
     private ContentValues generarValoresNota(ENota nota){
         ContentValues valores= new ContentValues();
         valores.put(ENota.FIELD_ASIGNATURA,nota.getAsignatura());
@@ -55,6 +74,7 @@ public class BD  extends SQLiteOpenHelper{
         valores.put(EExamen.FIELD_CALENDARIOID,examen.getCalendarioid());
         valores.put(EExamen.FIELD_CALENDARIONOMBRE,examen.getCalendarionombre());
         valores.put(EExamen.FIELD_EVENTOID,examen.getEventoid());
+        valores.put(EExamen.FIELD_DESCRIPCION,examen.getDescripcion());
         return valores;
     }
     public long  insertarAsignatura(EAsignatura asignatura){
@@ -137,6 +157,24 @@ public class BD  extends SQLiteOpenHelper{
             do {
                 nota=nota-c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
             } while(c.moveToNext());
+            if (nota<0){
+                nota=0;
+            }
+        }
+        return nota;
+    }
+    /*11-05-15*/
+    public float getNotaTotal(String asig){
+        String columnas[]={ENota.FIELD_EXAMEN,ENota.FIELD_ASIGNATURA,ENota.FIELD_NOTA,ENota.FIELD_NOTASOBRE};
+        Cursor c= db.query(ENota.TABLE_NAME,columnas,ENota.FIELD_ASIGNATURA+"=?",new String[]{asig},null,null,null);
+        Cursor c2 =buscarAsignatura(asig);
+        float nota=0;
+        //Nos aseguramos de que existe al menos un registro
+        if (c.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                nota=nota+c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
+            } while(c.moveToNext());
         }
         return nota;
     }
@@ -176,6 +214,7 @@ public class BD  extends SQLiteOpenHelper{
             String rowCalendarioId= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_CALENDARIOID));
             String rowEventoId= c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_EVENTOID));
             String rowCalendarioNombre=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_CALENDARIONOMBRE));
+            String rowDescripcion=c.getString(c.getColumnIndexOrThrow(EExamen.FIELD_DESCRIPCION));
             EExamen exa= new EExamen(rowName);
             exa.setAsignatura(rowAsig);
             exa.setFecha(rowFecha);
@@ -185,6 +224,7 @@ public class BD  extends SQLiteOpenHelper{
             exa.setEventoid(rowEventoId);
             exa.setCalendarionombre(rowCalendarioNombre);
             exa.setId(Integer.parseInt(ID));
+            exa.setDescripcion(rowDescripcion);
             return exa;
         }else
             return null;
@@ -284,6 +324,7 @@ public class BD  extends SQLiteOpenHelper{
         nuevoRegistro.put(EExamen.FIELD_EVENTOID,examen.getEventoid());
         nuevoRegistro.put(EExamen.FIELD_TIPOGUARDADO,examen.getTipoGuardado());
         nuevoRegistro.put(EExamen.FIELD_CALENDARIONOMBRE,examen.getCalendarionombre());
+        nuevoRegistro.put(EExamen.FIELD_DESCRIPCION,examen.getDescripcion());
         ContentValues nuevoRegistroNota = new ContentValues();
         nuevoRegistroNota.put(ENota.FIELD_ASIGNATURA,examen.getAsignatura());
         nuevoRegistroNota.put(ENota.FIELD_NOTA,nota.getNota());
@@ -297,47 +338,51 @@ public class BD  extends SQLiteOpenHelper{
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(EAsignatura.CREATE_DB_TABLE);
-        db.execSQL(EExamen.CREATE_DB_TABLE);
-       // db.execSQL(ENota.CREATE_DB_TABLE);
-        upgrade_2(db);
-        db.execSQL("PRAGMA foreign_keys = ON;");
+
+            db.execSQL(EAsignatura.CREATE_DB_TABLE);
+            db.execSQL(EExamen.CREATE_DB_TABLE);
+            // db.execSQL(ENota.CREATE_DB_TABLE);
+            upgrade_2(db);
+            upgrade_3(db);
+            db.execSQL("PRAGMA foreign_keys = ON;");
+
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        if(oldVersion == 1 && newVersion == 2){
+        if(oldVersion == 1 && newVersion >= 2){
             upgrade_2(db);
             //upgrade_2_modificar();
+        }
+        if (oldVersion>=1 && newVersion>=3){
+            upgrade_3(db);
         }
     }
     /*22-04-15*/
     private void upgrade_2(SQLiteDatabase db)
     {
         //
-        // Upgrade versión 2: definir algunos datos de ejemplo
+        // Upgrade versión 2: Agregar nota, tabla de notas y el nombre del calendario
         //
-        actualizado=false;
-        try {
-            db.beginTransaction();
+
             String SQLUpdateV2 = "ALTER TABLE "+ EAsignatura.TABLE_NAME+" ADD COLUMN "+ EAsignatura.FIELD_NOTA +" float";
             String SQLUpdateV2Examen = "ALTER TABLE "+ EExamen.TABLE_NAME+" ADD COLUMN "+ EExamen.FIELD_CALENDARIONOMBRE +" text";
             db.execSQL(SQLUpdateV2);
             db.execSQL(SQLUpdateV2Examen);
             db.execSQL(ENota.CREATE_DB_TABLE);
-            db.setTransactionSuccessful();
-        } catch(SQLException e) {
 
-        } finally {
-            db.endTransaction();
 
-        }
     }
-    /*22-04-15*/
-    public static boolean isActualizado() {
-        return actualizado;
+    /*11-05-15*/
+    private void upgrade_3(SQLiteDatabase db)
+    {
+        //
+        // Upgrade versión 3: Agregar descripción
+        //
+        String SQLUpdateV3Examen = "ALTER TABLE "+ EExamen.TABLE_NAME+" ADD COLUMN "+ EExamen.FIELD_DESCRIPCION +" text";
+        db.execSQL(SQLUpdateV3Examen);
     }
     /*22-04-15*/
     public void actualizar_schema2(){
@@ -375,7 +420,7 @@ public class BD  extends SQLiteOpenHelper{
         }
 
         Log.i(this.getClass().toString(), "Actualización versión 2 finalizada");
-        actualizado=true;
+
     }
     /*22-04-15*/
     private class CallAPI  extends AsyncTask<String, String, Void> {
@@ -399,4 +444,6 @@ public class BD  extends SQLiteOpenHelper{
             return null;
         }
     }
+
+
 }
