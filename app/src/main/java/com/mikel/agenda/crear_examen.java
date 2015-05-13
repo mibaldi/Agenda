@@ -130,7 +130,6 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
         spnCal = (Spinner) findViewById(R.id.spinner_cal);
         spnAsig.setAdapter(adapter);
         this.spnAsig.setOnItemSelectedListener(this);
-
         fecha=(TextView)findViewById(R.id.textView7);
         btn=(Button)findViewById(R.id.btnFecha);
         a=calendar.get(java.util.Calendar.YEAR);
@@ -293,9 +292,13 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
             } else {
                 examen.setTipoGuardado("Local");
                respuesta= helper.insertarExamen(examen);
+                if(respuesta!=-1 && nota_correcta) {
+                    helper.insertarNota(nota);
+                }
                 if (respuesta==-1 ){
                         Toast.makeText(getApplicationContext(), "No se ha podido insertar en local", Toast.LENGTH_SHORT).show();
                 }else{
+
                     Cursor cursor=helper.buscarExamen(examen.getNombre());
                     cursor.moveToPosition(0);
                     String rowId = cursor.getString(cursor.getColumnIndexOrThrow(EExamen.FIELD_ID));
@@ -408,9 +411,18 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
        CalendarList feed = null;
         ProgressDialog pd;
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(crear_examen.this);
+            pd.setMessage("buscando calendarios");
+            pd.setCancelable(false);
+            pd.show();
+        }
+        @Override
         protected Boolean doInBackground(Boolean... params) {
 
             try {
+
                 feed = client.calendarList().list().setMinAccessRole("writer").setMinAccessRole("owner").setFields(CalendarInfo.FEED_FIELDS).execute();
                 return true;
             } catch (UserRecoverableAuthIOException userRecoverableException) {
@@ -423,21 +435,6 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
             }
 
         }
-
-
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(crear_examen.this);
-            pd.setMessage("buscando calendarios");
-            pd.setCancelable(false);
-            pd.show();
-        }
-
-
-
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
@@ -475,6 +472,7 @@ public class crear_examen extends ActionBarActivity implements AdapterView.OnIte
                     }
                 };
                 spnCal.setAdapter(adapter2);
+
             }
 
 

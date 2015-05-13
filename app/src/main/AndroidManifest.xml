@@ -110,40 +110,66 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mikel.agenda.Examen" />
         </activity>
-        <activity android:name="drive.HomeActivity"
-            android:label="@string/app_name"/>
+        <activity
+            android:name="drive.HomeActivity"
+            android:label="@string/app_name" />
+        <activity android:name="drive.ListFilesActivity" />
+        <activity android:name="drive.QueryFilesActivity" />
+        <activity android:name="drive.SyncRequestsActivity" />
+        <activity android:name="drive.RetrieveContentsActivity" />
+        <activity android:name="drive.RetrieveContentsWithProgressDialogActivity" />
+        <activity android:name="drive.CreateFileActivity" />
+        <activity android:name="drive.CreateFileInAppFolderActivity" />
+        <activity android:name="drive.CreateFolderActivity" />
+        <activity android:name="drive.EditContentsActivity" />
+        <activity android:name="drive.EditMetadataActivity" />
+        <activity android:name="drive.CreateFileWithCreatorActivity" />
+        <activity android:name="drive.PickFileWithOpenerActivity" />
+        <activity android:name="drive.PickFolderWithOpenerActivity" />
+        <activity android:name="drive.RetrieveMetadataActivity" />
+        <activity android:name="drive.CreateFileInFolderActivity" />
+        <activity android:name="drive.CreateFolderInFolderActivity" />
+        <activity android:name="drive.ListFilesInFolderActivity" />
+        <activity android:name="drive.QueryFilesInFolderActivity" />
+        <activity android:name="drive.PinFileActivity" />
+        <activity android:name="drive.events.ListenChangeEventsForFilesActivity" />
+        <activity android:name="drive.QueryNonTextFilesActivity" />
+        <activity android:name="drive.QueryFilesSharedWithMeActivity" />
+        <activity android:name="drive.QueryFilesWithAInTitleActivity" />
+        <activity android:name="drive.QueryStarredTextFilesActivity" />
+        <activity android:name="drive.QueryTextOrHtmlFilesActivity" />
+        <activity android:name="drive.InsertUpdateCustomPropertyActivity" />
+        <activity android:name="drive.QueryFilesWithCustomPropertyActivity" />
+        <activity android:name="drive.DeleteCustomPropertyActivity" />
+        <activity android:name="drive.QuerySortedFilesActivity" />
+        <activity
+            android:name="drive.Backup"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".driveActivity"
+            android:label="@string/title_activity_drive"
+            android:parentActivityName=".ActividadPrincipal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.ActividadPrincipal" />
+        </activity>
 
-              <activity android:name="drive.ListFilesActivity" />
-              <activity android:name="drive.QueryFilesActivity" />
-              <activity android:name="drive.SyncRequestsActivity" />
-              <activity android:name="drive.RetrieveContentsActivity" />
-              <activity android:name="drive.RetrieveContentsWithProgressDialogActivity" />
-              <activity android:name="drive.CreateFileActivity" />
-              <activity android:name="drive.CreateFileInAppFolderActivity" />
-              <activity android:name="drive.CreateFolderActivity" />
-              <activity android:name="drive.EditContentsActivity" />
-              <activity android:name="drive.EditMetadataActivity" />
-              <activity android:name="drive.CreateFileWithCreatorActivity" />
-              <activity android:name="drive.PickFileWithOpenerActivity" />
-              <activity android:name="drive.PickFolderWithOpenerActivity" />
-              <activity android:name="drive.RetrieveMetadataActivity" />
-              <activity android:name="drive.CreateFileInFolderActivity" />
-              <activity android:name="drive.CreateFolderInFolderActivity" />
-              <activity android:name="drive.ListFilesInFolderActivity" />
-              <activity android:name="drive.QueryFilesInFolderActivity" />
-              <activity android:name="drive.PinFileActivity" />
-              <activity android:name="drive.events.ListenChangeEventsForFilesActivity" />
-              <activity android:name="drive.QueryNonTextFilesActivity" />
-              <activity android:name="drive.QueryFilesSharedWithMeActivity" />
-              <activity android:name="drive.QueryFilesWithAInTitleActivity" />
-              <activity android:name="drive.QueryStarredTextFilesActivity" />
-              <activity android:name="drive.QueryTextOrHtmlFilesActivity" />
-              <activity android:name="drive.InsertUpdateCustomPropertyActivity" />
-              <activity android:name="drive.QueryFilesWithCustomPropertyActivity" />
-              <activity android:name="drive.DeleteCustomPropertyActivity" />
-              <activity android:name="drive.QuerySortedFilesActivity" />
-        <activity android:name="drive.Backup" android:label="@string/app_name"/>
-
+        <activity
+            android:name="drive.Exportar"
+            android:label="@string/app_name"
+            android:parentActivityName=".ActividadPrincipal" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.mikel.agenda.ActividadPrincipal"/>
+        </activity>
+        <activity
+            android:name="drive.Importar"
+            android:label="@string/app_name"
+            android:parentActivityName=".ActividadPrincipal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mikel.agenda.ActividadPrincipal"/>
+        </activity>
     </application>
 
 </manifest>

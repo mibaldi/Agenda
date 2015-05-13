@@ -86,10 +86,7 @@ public abstract class BaseDemoActivity extends Activity implements
                     .build();
         }
         mGoogleApiClient.connect();
-        /*SharedPreferences prefs =
-                getSharedPreferences("preferenciasApp", Context.MODE_PRIVATE);
-        EXISTING_FILE_ID =prefs.getString("driveID","");
-        EXISTING_FOLDER_ID=prefs.getString("FolderID","");*/
+
 
     }
 

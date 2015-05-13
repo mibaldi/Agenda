@@ -33,7 +33,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import BD.BD;
-import drive.Backup;
 import mycalendar.CalendarInfo;
 import mycalendar.CalendarModel;
 ////////////////////////////
@@ -99,7 +98,7 @@ public class ActividadPrincipal extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
                 helper.closeBD();
-                intent3 = new Intent(ActividadPrincipal.this, Backup.class);
+                intent3 = new Intent(ActividadPrincipal.this, driveActivity.class);
                 startActivity(intent3);
                 break;
             case R.id.menu_accounts:

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".Backup">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Importar la Base de datos"
+        android:id="@+id/recuperar2"
+        android:onClick="importar"
+        android:layout_below="@+id/file"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escoger Base de datos"
+        android:id="@+id/recuperar"
+        android:onClick="recuperar"
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@+id/file"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/file"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

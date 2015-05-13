@@ -76,7 +76,16 @@ public class Examen extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     public void borrar(View view){
-        new CallAPI().execute();
+        if(ExamenEscogido.getTipoGuardado().matches("Local")){
+            helper.deleteExamen(ID,ExamenEscogido.getNombre());
+            Toast.makeText(getApplicationContext(), "Examen borrado", Toast.LENGTH_SHORT).show();
+            Intent intent1 = new Intent(Examen.this, Examenes.class);
+            startActivity(intent1);
+            finish();
+        }else{
+            new CallAPI().execute();
+        }
+
 
     }
     public long borrar2(){
@@ -105,7 +114,7 @@ public class Examen extends ActionBarActivity {
         }
         @Override
         protected Long doInBackground(String... params) {
-            Long l;
+            Long l=Long.parseLong("0");
             try {
                 client.events().delete(ExamenEscogido.getCalendarioid(),ExamenEscogido.getEventoid()).execute();
                 l=helper.deleteExamen(ID,ExamenEscogido.getNombre());
@@ -113,10 +122,7 @@ public class Examen extends ActionBarActivity {
                 startActivity(intent1);
                finish();
             } catch (IOException e) {
-                l=helper.deleteExamen(ID,ExamenEscogido.getNombre());
-                Intent intent1 = new Intent(Examen.this, Examenes.class);
-                startActivity(intent1);
-                finish();
+
             }
             return l;
         }

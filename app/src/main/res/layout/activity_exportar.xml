@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".Backup">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escoger carpeta de Drive para guardar la Base de datos"
+        android:id="@+id/button"
+        android:onClick="escoger"
+        android:layout_above="@+id/fichero"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/fichero"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="subir"
+        android:id="@+id/subir"
+        android:onClick="subir"
+        android:layout_below="@+id/fichero"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
