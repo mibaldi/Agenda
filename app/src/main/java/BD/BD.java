@@ -22,7 +22,7 @@ public class BD  extends SQLiteOpenHelper{
     public static final String DB_NAME= "agenda";
     private static final int SCHEME_VERSION = 3;
 
-    private static SQLiteDatabase db;
+    private SQLiteDatabase db;
 
     String columnasExamen[]={EExamen.FIELD_ID,EExamen.FIELD_NOMBRE,EExamen.FIELD_ASIGNATURA,EExamen.FIELD_FECHA,EExamen.FIELD_HORA,EExamen.FIELD_TIPOGUARDADO,EExamen.FIELD_CALENDARIOID,EExamen.FIELD_EVENTOID,EExamen.FIELD_CALENDARIONOMBRE,EExamen.FIELD_DESCRIPCION};
     public BD(Context context) {
@@ -39,7 +39,7 @@ public class BD  extends SQLiteOpenHelper{
             return -1;
         }
     }
-    public static int closeBD(){
+    public  int closeBD(){
         try{
             db.close();
             return 1;

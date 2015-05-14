@@ -41,7 +41,7 @@
     <string name="title_separator_desc">Title separator</string>
 
     <string name="refresh">Refresh</string>
-
+    <string name="gestor">Gestor de Base de datos</string>
     <string name="batchadd">Copy Calendar x3 (Batch)</string>
 
     <string name="edit">Editar</string>

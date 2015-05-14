@@ -144,7 +144,7 @@ public class Importar extends BaseDemoActivity {
         }
     }
     public void setDB(InputStream is) {
-        BD.closeBD();
+        //BD.closeBD();
         Context ctx = getApplicationContext();
         try {
             File to = ctx.getDatabasePath(BD.DB_NAME);

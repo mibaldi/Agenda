@@ -68,6 +68,7 @@ public class ActividadPrincipal extends ActionBarActivity {
         // enable logging
         Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
         // Google Accounts
+
         credential =
                 GoogleAccountCredential.usingOAuth2(this, Collections.singleton(CalendarScopes.CALENDAR));
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
@@ -90,14 +91,14 @@ public class ActividadPrincipal extends ActionBarActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.menu_actividad_principal, menu);
         return super.onCreateOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_refresh:
-                helper.closeBD();
+            case R.id.menu_gestor:
+               // helper.closeBD();
                 intent3 = new Intent(ActividadPrincipal.this, driveActivity.class);
                 startActivity(intent3);
                 break;

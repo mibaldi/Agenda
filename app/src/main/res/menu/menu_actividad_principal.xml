@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".ActividadPrincipal">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_accounts"
+        android:icon="@drawable/ic_mailboxes_accounts"
+        android:title="@string/accounts"/>
+    <item
+        android:id="@+id/menu_gestor"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/gestor"/>
 </menu>

@@ -1,10 +1,8 @@
 package com.mikel.agenda;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import drive.Exportar;
@@ -33,7 +31,7 @@ public class driveActivity extends ActionBarActivity {
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_drive, menu);
@@ -53,5 +51,5 @@ public class driveActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

@@ -14,10 +14,10 @@
 
 package drive;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -30,7 +30,7 @@ import com.google.android.gms.drive.Drive;
  * An abstract activity that handles authorization and connection to the Drive
  * services.
  */
-public abstract class BaseDemoActivity extends Activity implements
+public abstract class BaseDemoActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
