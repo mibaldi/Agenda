@@ -25,6 +25,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.plus.Plus;
+import com.mikel.agenda.ActividadPrincipal;
 
 /**
  * An abstract activity that handles authorization and connection to the Drive
@@ -79,6 +81,7 @@ public abstract class BaseDemoActivity extends ActionBarActivity implements
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
+                    .addApi(Plus.API)
                     .addScope(Drive.SCOPE_FILE)
                     .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
                     .addConnectionCallbacks(this)
@@ -99,6 +102,11 @@ public abstract class BaseDemoActivity extends ActionBarActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
             mGoogleApiClient.connect();
+        }
+        if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_CANCELED) {
+            Intent intent1 = new Intent(BaseDemoActivity.this, ActividadPrincipal.class);
+            startActivity(intent1);
+            finish();
         }
     }
 
@@ -122,6 +130,11 @@ public abstract class BaseDemoActivity extends ActionBarActivity implements
         Log.i(TAG, "GoogleApiClient connected");
     }
 
+    public void chooseAccount() {
+        Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+        mGoogleApiClient.disconnect();
+        mGoogleApiClient.connect();
+    }
     /**
      * Called when {@code mGoogleApiClient} is disconnected.
      */

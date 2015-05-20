@@ -19,6 +19,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -46,7 +49,7 @@ import BD.BD;
  */
 public class Importar extends BaseDemoActivity {
     private static final String TAG = "importar";
-    private static final int REQUEST_CODE_OPENER = 1;
+    private static final int REQUEST_CODE_OPENER = 200;
    static DriveId folderId;
     static String fileIdString="";
     TextView file;
@@ -70,7 +73,7 @@ public class Importar extends BaseDemoActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case REQUEST_CODE_OPENER:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK ) {
                     folderId = (DriveId) data.getParcelableExtra(
                             OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
                     if(folderId!=null){
@@ -174,5 +177,19 @@ public class Importar extends BaseDemoActivity {
             startActivity(intent1);
             finish();
         } catch (Exception e) {}
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_drive, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_accounts:
+                chooseAccount();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -27,7 +27,7 @@
     <string name="editar">Editar</string>
     <string name="borrar">Borrar</string>
     <string name="description_add">Add Calendar</string>
-
+    <string name="cuenta">Escoge la cuenta del drive</string>
     <string name="summary">Title</string>
 
     <string name="summary_hint">Enter the calendar title</string>

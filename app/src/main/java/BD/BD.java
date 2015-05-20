@@ -173,7 +173,7 @@ public class BD  extends SQLiteOpenHelper{
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                nota=nota+c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTASOBRE));
+                nota=nota+c.getFloat(c.getColumnIndexOrThrow(ENota.FIELD_NOTA));
             } while(c.moveToNext());
         }
         return nota;

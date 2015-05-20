@@ -19,6 +19,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,7 +55,7 @@ import BD.BD;
  */
 public class Exportar extends BaseDemoActivity {
     private static final String TAG = "Backup";
-    private static final int REQUEST_CODE_OPENER = 1;
+    private static final int REQUEST_CODE_OPENER = 200;
    static DriveId folderId;
    static String folderIdString="";
     TextView fichero,file;
@@ -194,5 +197,19 @@ public class Exportar extends BaseDemoActivity {
         } catch (Exception e) {}
         finally { try { if (bufIS != null) bufIS.close(); } catch (IOException e) {}}
         return byteBuffer.toByteArray();
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_drive, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_accounts:
+                chooseAccount();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
